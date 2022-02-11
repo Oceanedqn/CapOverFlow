@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CapOverFlow.Shared
+namespace CapOverFlow.Shared.Models
 {
     [Table("T_Type_TYP")]
     public class TypeDto

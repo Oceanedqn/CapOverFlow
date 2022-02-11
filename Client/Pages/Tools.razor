@@ -1,5 +1,6 @@
 ﻿@page "/tools"
 @inject ITagService TagService
+@inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
 @implements IDisposable
 
@@ -9,44 +10,46 @@
 
 @if (TagService == null)
 {
-<p><em>Loading...</em></p>
+    <p><em>Loading...</em></p>
 }
 else
 {
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name </th>
-            <th>Category</th>
-            <th></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var pubulication in TagService.Tags)
-        {
-        <tr>
-            <td>@pubulication.TAG_id</td>
-            <td>@pubulication.TAG_name</td>
-            <td>@pubulication.TAG_category</td>
-            <td><button class="btn btn-primary" @onclick="(() => EditTag(currentTag.TAG_id))">Edit</button></td>
-            <td><button class="btn btn-danger" @onclick="(() => DeleteTag(currentTag.TAG_id))">X</button></td>
-        </tr>
-        }
-    </tbody>
-</table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name </th>
+                <th>Category</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tag in TagService.Tags)
+            {
+                <tr>
+                    <td>@tag.TAG_id</td>
+                    <td>@tag.TAG_name</td>
+                    <td>@(CategoryService.Cateogries.FirstOrDefault(category => category.CTG_id == tag.CTG_id).CTG_name)</td>
+                    <td><button class="btn btn-primary" @onclick="(() => Edit(tag.TAG_id))">Edit</button></td>
+                    <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TAG_id))">X</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 <EditTag Tag="currentTag"></EditTag>
 
 
 @code {
-    TagsDto currentTag = new TagsDto();
+    TagDto currentTag = new TagDto();
+    public CategoryDto Category { get; set; } = new CategoryDto();
 
     protected override async Task OnInitializedAsync()
     {
         await TagService.GetTags();
+        await CategoryService.GetCategories();
         TagService.OnChange += StateHasChanged;
     }
 
@@ -55,17 +58,17 @@ else
         TagService.OnChange -= StateHasChanged;
     }
 
-    void EditTag(int id)
+    void Edit(int id)
     {
         currentTag = TagService.Tags.Find(h => h.TAG_id == id);
     }
 
-    void DeleteTag(int id)
+    void Delete(int id)
     {
         TagService.DeleteTag(id);
     }
 
-    void UpdateTag(int id)
+    void Update(int id)
     {
         currentTag = TagService.Tags.Find(h => h.TAG_id == id);
     }

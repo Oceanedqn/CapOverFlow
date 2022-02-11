@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CapOverFlow.Shared;
+using CapOverFlow.Shared.Models;
 
 namespace CapOverFlow.Client.Services
 {
@@ -10,17 +10,17 @@ namespace CapOverFlow.Client.Services
     {
         event Action OnChange;
 
-        List<TagsDto> Tags { get; set; }
+        List<TagDto> Tags { get; set; }
 
-        Task<List<TagsDto>> GetTags();
+        Task<List<TagDto>> GetTags();
 
-        Task<TagsDto> GetTag(int id);
+        Task<TagDto> GetTag(int id);
 
-        Task<List<TagsDto>> CreateTag(TagsDto tag);
+        Task<List<TagDto>> CreateTag(TagDto tag);
 
-        Task<List<TagsDto>> UpdateTag(TagsDto tag, int id);
+        Task<List<TagDto>> UpdateTag(TagDto tag, int id);
 
-        Task<List<TagsDto>> DeleteTag(int id);
+        Task<List<TagDto>> DeleteTag(int id);
 
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
-using CapOverFlow.Shared;
+using CapOverFlow.Shared.Models;
 
 namespace CapOverFlow.Client.Services
 {

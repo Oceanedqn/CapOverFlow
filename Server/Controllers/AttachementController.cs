@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CapOverFlow.Shared;
+using CapOverFlow.Shared.Models;
 using CapOverFlow.Server.Data;
 
 namespace CapOverFlow.Server.Controllers

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CapOverFlow.Shared;
+using CapOverFlow.Shared.Models;
 using CapOverFlow.Server.Data;
 
 namespace CapOverFlow.Server.Controllers
@@ -20,7 +20,7 @@ namespace CapOverFlow.Server.Controllers
         }
 
 
-        private async Task<List<TagsDto>> GetDbTags()
+        private async Task<List<TagDto>> GetDbTags()
         {
             return await _context.Tags.ToListAsync();
         }
@@ -42,7 +42,7 @@ namespace CapOverFlow.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTag(TagsDto tag)
+        public async Task<IActionResult> CreateTag(TagDto tag)
         {
             _context.Tags.Add(tag);
             await _context.SaveChangesAsync();
@@ -51,7 +51,7 @@ namespace CapOverFlow.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTag(TagsDto tag, int id)
+        public async Task<IActionResult> UpdateTag(TagDto tag, int id)
         {
             var dbTag = await _context.Tags
                 .FirstOrDefaultAsync(h => h.TAG_id == id);
@@ -59,7 +59,7 @@ namespace CapOverFlow.Server.Controllers
                 return NotFound("Super Hero wasn't found.");
 
             dbTag.TAG_name = tag.TAG_name;
-            dbTag.TAG_category = tag.TAG_category;
+            dbTag.CTG_id = 1;
 
             await _context.SaveChangesAsync();
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CapOverFlow.Shared;
+using CapOverFlow.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace CapOverFlow.Server.Data
         {
             modelBuilder.Entity<IncludeDto>().HasNoKey();      
         }
-        public DbSet<TagsDto> Tags { get; set; }
+        public DbSet<TagDto> Tags { get; set; }
 
         public DbSet<UserDto> Users { get; set; }
 
@@ -28,6 +28,8 @@ namespace CapOverFlow.Server.Data
         public DbSet<IncludeDto> Includes { get; set; }
 
         public DbSet<AttachementDto> Attachements { get; set; }
+
+        public DbSet<CategoryDto> Category { get; set; }
 
 
     }

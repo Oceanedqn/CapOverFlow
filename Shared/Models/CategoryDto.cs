@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace CapOverFlow.Shared.Models
 {
-    [Table("T_Attachement_ATC")]
-    public class AttachementDto
+    [Table("T_Categories_CTG")]
+    public class CategoryDto
     {
         [Key]
-        public int ATC_id { get; set; }
-        public string ATC_name { get; set; }
-        public string ATC_content { get; set; }
-        public int ATC_date { get; set; }
-        public int PBC_id { get; set; }
+        public int CTG_id { get; set; } = 1;
+        public string CTG_name { get; set; }
+        public string CTG_color { get; set; }
+        
     }
 }

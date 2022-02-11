@@ -1,4 +1,5 @@
 ﻿@inject ITagService TagService
+@inject ICategoryService CategoryService 
 
 @if (Tag.TAG_id == 0)
 {
@@ -17,38 +18,63 @@ else
     <div class="form-group">
         <label>Nom</label>
         <InputText @bind-Value="Tag.TAG_name" class="form-control"></InputText>
-
     </div>
     <div class="form-group">
         <label>Categorie</label>
-        <InputText @bind-Value="Tag.TAG_category" class="form-control"></InputText>
+        
 
+        <InputSelect @bind-Value="Category.CTG_id">
+            @foreach (var category in CategoryService.Cateogries)
+            {
+                <option value="@category.CTG_id">@category.CTG_name</option>
+            }
+            
+        </InputSelect>
+        <p>Value select : @Category.CTG_id</p>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+    @if (Tag.TAG_id != 0)
+    {
+
+
+        <button type="submit" class="btn btn-primary">Modifier</button>
+
+        <button type="button" class="btn btn-secondary">Retour</button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-primary">Créer</button>
+    }
 </EditForm>
 
 
 @code {
     [Parameter]
-    public TagsDto Tag { get; set; } = new TagsDto();
+    public TagDto Tag { get; set; } = new TagDto();
+    public CategoryDto Category { get; set; } = new CategoryDto();
 
     protected override async Task OnParametersSetAsync()
     {
         await TagService.GetTags();
+        await CategoryService.GetCategories();
     }
 
     async void HandleSubmit()
     {
-
+        System.Diagnostics.Debug.WriteLine(Tag);
         if (Tag.TAG_id == 0)
         {
 
+            Tag.CTG_id = Category.CTG_id;
             await TagService.CreateTag(Tag);
         }
         else
         {
 
             await TagService.UpdateTag(Tag, Tag.TAG_id);
+
         }
 
     }

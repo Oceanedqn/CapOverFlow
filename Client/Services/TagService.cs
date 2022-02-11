@@ -1,4 +1,4 @@
-﻿using CapOverFlow.Shared;
+﻿using CapOverFlow.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,40 +15,42 @@ namespace CapOverFlow.Client.Services
         {
             _httpClient = httpClient;
         }
-        public List<TagsDto> Tags { get; set; } = new List<TagsDto>();
+        public List<TagDto> Tags { get; set; } = new List<TagDto>();
 
         public event Action OnChange;
 
-        public async Task<List<TagsDto>> GetTags()
+        public async Task<List<TagDto>> GetTags()
         {
-            Tags = await _httpClient.GetFromJsonAsync<List<TagsDto>>($"api/Tag");
+            Tags = await _httpClient.GetFromJsonAsync<List<TagDto>>($"api/Tag");
             return Tags;
         }
 
-        public async Task<TagsDto> GetTag(int id)
+        public async Task<TagDto> GetTag(int id)
         {
-            return await _httpClient.GetFromJsonAsync<TagsDto>($"api/Tags/{id}");
+            return await _httpClient.GetFromJsonAsync<TagDto>($"api/Tag/{id}");
         }
 
-        public async Task<List<TagsDto>> CreateTag(TagsDto tag)
+        public async Task<List<TagDto>> CreateTag(TagDto tag)
         {
-            var result = await _httpClient.PostAsJsonAsync<TagsDto>($"api/Tag", tag);
-            Tags = await result.Content.ReadFromJsonAsync<List<TagsDto>>();
-            return Tags;
-        }
-
-        public async Task<List<TagsDto>> UpdateTag(TagsDto tag, int id)
-        {
-            var result = await _httpClient.PutAsJsonAsync<TagsDto>($"api/Tags/{id}", tag);
-            Tags = await result.Content.ReadFromJsonAsync<List<TagsDto>>();
+            var result = await _httpClient.PostAsJsonAsync<TagDto>($"api/Tag", tag);
+            Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
             OnChange.Invoke();
             return Tags;
         }
 
-        public async Task<List<TagsDto>> DeleteTag(int id)
+        public async Task<List<TagDto>> UpdateTag(TagDto tag, int id)
         {
-            var result = await _httpClient.DeleteAsync($"api/Tags/{id}");
-            Tags = await result.Content.ReadFromJsonAsync<List<TagsDto>>();
+            Console.Write(tag);
+            var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/Tag/{id}", tag);
+            Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
+            OnChange.Invoke();
+            return Tags;
+        }
+
+        public async Task<List<TagDto>> DeleteTag(int id)
+        {
+            var result = await _httpClient.DeleteAsync($"api/Tag/{id}");
+            Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
             OnChange.Invoke();
             return Tags;
         }
