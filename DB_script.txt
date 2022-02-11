@@ -1,0 +1,82 @@
+CREATE TABLE T_User_USR(
+        USR_id         Int  IDENTITY  NOT NULL ,
+        USR_lastname   Varchar (30) NOT NULL ,
+        USR_firstname  Varchar (30) NOT NULL ,
+        USR_mail       Varchar (40) NOT NULL ,
+        USR_experience Int NOT NULL
+	,CONSTRAINT T_User_USR_PK PRIMARY KEY (USR_id)
+);
+
+CREATE TABLE T_Type_TYP(
+	TYP_id			Int  IDENTITY  NOT NULL ,
+        TYP_name		Varchar (25) NOT NULL
+	,CONSTRAINT T_Type_TYP_PK PRIMARY KEY (TYP_id)
+);
+
+
+
+CREATE TABLE T_Publication_PBC(
+        PBC_id            Int  IDENTITY  NOT NULL ,
+        PBC_title         Varchar (100) NOT NULL ,
+        PBC_description   Varchar (1000) NOT NULL ,
+        PBC_resolved      Bit NOT NULL ,
+        QST_date          Int NOT NULL ,
+        USR_id            Int NOT NULL ,
+        TYP_id			  Int NOT NULL
+	,CONSTRAINT T_Publication_PBC_PK PRIMARY KEY (PBC_id)
+
+	,CONSTRAINT T_Publication_PBC_T_User_USR_FK FOREIGN KEY (USR_id) REFERENCES T_User_USR(USR_id)
+	,CONSTRAINT T_Publication_PBC_T_Type_TYP_FK FOREIGN KEY (TYP_id) REFERENCES T_Type_TYP(TYP_id)
+);
+
+
+
+CREATE TABLE T_Attachement_ATC(
+        ATC_id      Int  NOT NULL IDENTITY,
+        ATC_name    Varchar (25) NOT NULL ,
+        ATC_content Varchar (1000) NOT NULL ,
+        ATC_date    Int NOT NULL ,
+        PBC_id      Int NOT NULL
+	,CONSTRAINT T_Attachement_ATC_PK PRIMARY KEY (ATC_id)
+
+	,CONSTRAINT T_Attachement_ATC_T_Publication_PBC_FK FOREIGN KEY (PBC_id) REFERENCES T_Publication_PBC(PBC_id)
+);
+
+CREATE TABLE T_Categories_CTG(
+        CTG_id    Int  IDENTITY  NOT NULL ,
+        CTG_name  Varchar (20) NOT NULL ,
+        CTG_color Varchar (15) NOT NULL
+	,CONSTRAINT T_CATEGORIES_CTG_PK PRIMARY KEY (CTG_id)
+);
+
+CREATE TABLE T_Tags_TAG(
+        TAG_id       Int  IDENTITY  NOT NULL ,
+        TAG_name     Varchar (25) NOT NULL ,
+        CTG_id   Int NOT NULL
+	,CONSTRAINT T_Tags_TAG_PK PRIMARY KEY (TAG_id)
+
+	,CONSTRAINT T_Tags_TAG_T_CATEGORIES_CTG_FK FOREIGN KEY (CTG_id) REFERENCES T_CATEGORIES_CTG(CTG_id)
+);
+
+CREATE TABLE T_Include_ICD(
+        TAG_id Int NOT NULL ,
+        PBC_id Int NOT NULL
+	,CONSTRAINT INCLUDE_PK PRIMARY KEY (TAG_id,PBC_id)
+
+	,CONSTRAINT T_Include_ICD_T_Tags_TAG_FK FOREIGN KEY (TAG_id) REFERENCES T_Tags_TAG(TAG_id)
+	,CONSTRAINT T_Include_ICD_T_Publication_PBC0_FK FOREIGN KEY (PBC_id) REFERENCES T_Publication_PBC(PBC_id)
+);
+
+CREATE TABLE T_Logs_LOG(
+        LOG_id          Int  IDENTITY  NOT NULL ,
+        LOG_title       Varchar (25) NOT NULL ,
+        LOG_description Varchar (50) NOT NULL
+);
+
+
+INSERT INTO T_Categories_CTG(CTG_name, CTG_color)
+ VALUES
+ ('DEV', '#3A7CA5'),
+ ('DATA', '#D9DCD6'),
+ ('CYBER SECURITE', '#81C3D7'),
+ ('IOT', '#16425B');
