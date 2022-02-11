@@ -1,0 +1,74 @@
+﻿@page "/tools"
+@inject ITagService TagService
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<h3>Tools</h3>
+
+<p>Liste de tags</p>
+
+@if (TagService == null)
+{
+<p><em>Loading...</em></p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name </th>
+            <th>Category</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pubulication in TagService.Tags)
+        {
+        <tr>
+            <td>@pubulication.TAG_id</td>
+            <td>@pubulication.TAG_name</td>
+            <td>@pubulication.TAG_category</td>
+            <td><button class="btn btn-primary" @onclick="(() => EditTag(currentTag.TAG_id))">Edit</button></td>
+            <td><button class="btn btn-danger" @onclick="(() => DeleteTag(currentTag.TAG_id))">X</button></td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
+
+<EditTag Tag="currentTag"></EditTag>
+
+
+@code {
+    TagsDto currentTag = new TagsDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TagService.GetTags();
+        TagService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        TagService.OnChange -= StateHasChanged;
+    }
+
+    void EditTag(int id)
+    {
+        currentTag = TagService.Tags.Find(h => h.TAG_id == id);
+    }
+
+    void DeleteTag(int id)
+    {
+        TagService.DeleteTag(id);
+    }
+
+    void UpdateTag(int id)
+    {
+        currentTag = TagService.Tags.Find(h => h.TAG_id == id);
+    }
+
+
+}

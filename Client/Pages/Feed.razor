@@ -1,0 +1,59 @@
+﻿@page "/feed"
+@inject IPublicationService PublicationService 
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<h1>Feed</h1>
+
+<p>Toutes les dernières questions.</p>
+
+@if (PublicationService == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title </th>
+                <th>Description</th>
+                <th>Resolved</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pubulication in PublicationService.Publications)
+            {
+            <tr>
+                <td>@pubulication.PBC_id</td>
+                <td>@pubulication.PBC_title</td>
+                <td>@pubulication.PBC_description</td>
+                <td>@pubulication.PBC_resolved</td>
+                <td>@pubulication.QST_date</td>
+                <td>@pubulication.USR_id</td>
+                <td>@pubulication.TYP_id</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    //PublicationDto publicationEdit = new PublicationDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PublicationService.GetPublications();
+        //PublicationService.Onchange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        //PublicationService.Onchange -= StateHasChanged;
+    }
+
+}

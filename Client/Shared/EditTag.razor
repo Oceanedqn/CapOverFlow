@@ -1,0 +1,56 @@
+﻿@inject ITagService TagService
+
+@if (Tag.TAG_id == 0)
+{
+
+    <h3>Create a new Tag</h3>
+}
+else
+{
+
+    <h3> Edit : @Tag.TAG_name</h3>
+}
+
+
+
+<EditForm Model="Tag" OnSubmit="HandleSubmit">
+    <div class="form-group">
+        <label>Nom</label>
+        <InputText @bind-Value="Tag.TAG_name" class="form-control"></InputText>
+
+    </div>
+    <div class="form-group">
+        <label>Categorie</label>
+        <InputText @bind-Value="Tag.TAG_category" class="form-control"></InputText>
+
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public TagsDto Tag { get; set; } = new TagsDto();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await TagService.GetTags();
+    }
+
+    async void HandleSubmit()
+    {
+
+        if (Tag.TAG_id == 0)
+        {
+
+            await TagService.CreateTag(Tag);
+        }
+        else
+        {
+
+            await TagService.UpdateTag(Tag, Tag.TAG_id);
+        }
+
+    }
+
+}
