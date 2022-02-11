@@ -1,11 +1,11 @@
 # CapOverFlow
 
-/!\ Créer la base de données avec le script à la racine du repo /!\
+!! Install the database with the script "DB_script.txt" to the repository root
 
-Pour lancer le serveur :
-* Outils > NuGet Package Manager > Package Manager Console (pour ajouter la console)
-* Se rendre dans le dossier server : cd .\Server
-* Lancer l'application : dotnet watch
+To strat the server :
+* Tools > NuGet Package Manager > Package Manager Console (To add the console)
+* Go to the server folder : cd .\Server
+* Start the application with : dotnet watch
 
 
 
