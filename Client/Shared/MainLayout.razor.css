@@ -18,10 +18,11 @@ light blue      :   RGB( 18, 171, 219)*/
 .top-row {
     background-color: RGB( 0, 112, 173);
     justify-content: flex-end;
-    height: 6vh;
+    height: 60px;
+    line-height:60px;
     display: flex;
     align-items: center;
-}
+},
 
     .top-row ::deep a, .top-row .btn-link {
         white-space: nowrap;
