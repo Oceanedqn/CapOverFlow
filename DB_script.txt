@@ -76,7 +76,13 @@ CREATE TABLE T_Logs_LOG(
 
 INSERT INTO T_Categories_CTG(CTG_name, CTG_color)
  VALUES
- ('DEV', '#3A7CA5'),
- ('DATA', '#D9DCD6'),
- ('CYBER SECURITE', '#81C3D7'),
+ ('Dev', '#3A7CA5'),
+ ('Data', '#D9DCD6'),
+ ('Cyber securite', '#81C3D7'),
  ('IOT', '#16425B');
+
+INSERT INTO T_Type_TYP(TYP_name)
+VALUES
+('post'),
+('response'),
+('biblio');
