@@ -6,12 +6,10 @@
         <div class="col-12">
             @if (Tag.TAG_id == 0)
             {
-
                 <h4 class="mt-5">Create a new Tag</h4>
             }
             else
             {
-
                 <h4 class="mt-5"> Edit : @Tag.TAG_name</h4>
             }
         </div>
@@ -23,27 +21,17 @@
                 </div>
                 <div class="form-group">
                     <label>Categorie</label>
-
-
                     <InputSelect @bind-Value="Tag.CTG_id" class="form-control">
-
                         <option value="0"></option>
-
                         @foreach (var category in CategoryService.Cateogries)
                         {
                             <option value="@category.CTG_id">@category.CTG_name</option>
                         }
                     </InputSelect>
                 </div>
-
-
-
                 @if (Tag.TAG_id != 0)
                 {
-
-
                     <button type="submit" class="btn btn-primary">Modifier</button>
-
                     <button type="button" @onclick="BackToCreate" class="btn btn-secondary">Retour</button>
                 }
                 else
