@@ -38,10 +38,10 @@ namespace CapOverFlow.Client.Services
             return Tags;
         }
 
-        public async Task<List<TagDto>> UpdateTag(TagDto tag, int id)
+        public async Task<List<TagDto>> UpdateTag(TagDto tag)
         {
             Console.Write(tag);
-            var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/Tag/{id}", tag);
+            var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/Tag/{tag.TAG_id}", tag);
             Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
             OnChange.Invoke();
             return Tags;

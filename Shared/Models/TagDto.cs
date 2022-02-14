@@ -13,7 +13,10 @@ namespace CapOverFlow.Shared.Models
     {
         [Key]
         public int TAG_id { get; set; } = 0;
+        [Required]
+        [StringLength(25, ErrorMessage = "Name is too long.")]
         public string TAG_name { get; set; }
+        [Required]
         public int CTG_id { get; set; }
     }
 }

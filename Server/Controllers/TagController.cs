@@ -51,15 +51,15 @@ namespace CapOverFlow.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTag(TagDto tag, int id)
+        public async Task<IActionResult> UpdateTag(TagDto tag)
         {
             var dbTag = await _context.Tags
-                .FirstOrDefaultAsync(h => h.TAG_id == id);
+                .FirstOrDefaultAsync(h => h.TAG_id == tag.TAG_id);
             if (dbTag == null)
                 return NotFound("Super Hero wasn't found.");
 
             dbTag.TAG_name = tag.TAG_name;
-            dbTag.CTG_id = 1;
+            dbTag.CTG_id = tag.CTG_id;
 
             await _context.SaveChangesAsync();
 

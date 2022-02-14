@@ -18,7 +18,6 @@ light blue      :   RGB( 18, 171, 219)*/
 .top-row {
     background-color: RGB( 0, 112, 173);
     justify-content: flex-end;
-    border-bottom: 1px solid;
     height: 6vh;
     display: flex;
     align-items: center;

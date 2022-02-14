@@ -18,7 +18,7 @@ namespace CapOverFlow.Client.Services
 
         Task<List<TagDto>> CreateTag(TagDto tag);
 
-        Task<List<TagDto>> UpdateTag(TagDto tag, int id);
+        Task<List<TagDto>> UpdateTag(TagDto tag);
 
         Task<List<TagDto>> DeleteTag(int id);
 
