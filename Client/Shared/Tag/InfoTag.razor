@@ -1,0 +1,45 @@
+﻿@inject ITagService TagService
+@inject ICategoryService CategoryService
+
+
+
+<div class="continer-fluid mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h4>Information</h4>
+            <EditForm Model="Tag">
+                <div class="form-group">
+                    <label >Nom</label>
+                    <label class="form-control">@Tag.TAG_name</label>
+                </div>
+                <div class="form-group">
+                    <label >Categorie</label>
+                    <label class="form-control">@Category.CTG_name</label>
+                </div>
+                <div class="form-group">
+                    <label>Couleur</label>
+                    <label class="form-control" style="background-color:@Category.CTG_color; color:white;">@Category.CTG_color</label>
+                </div>
+            
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public TagDto Tag { get; set; } = new TagDto();
+    public CategoryDto Category { get; set; } = new CategoryDto();
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        if(Tag.TAG_id != 0)
+        {
+            Category = await CategoryService.GetCategory(Tag.CTG_id);
+            
+        }
+    }
+
+}
