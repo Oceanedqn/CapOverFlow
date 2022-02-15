@@ -1,33 +1,34 @@
 ﻿@page "/questions"
-
-
-
-
-
+@inject IPublicationService PublicationService
+@inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm">
             <h3>Comment puis-je t'aider ?</h3>
-            <div class="mb-3">
-                <input class="form-control shadow-sm form-rounded" placeholder="Sujet">
-            </div>
-            <div class="mb-3">
-                <textarea class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></textarea>
-            </div>
-            <div class="mb-3 input-group">
-                <input type="text" class="form-control form-rounded" placeholder="Tag" aria-describedby="button-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary form-rounded" type="button" id="button-addon2">+</button>
+            <EditForm Model="Publication" OnSubmit="HandleSubmit">
+                <div class="mb-3">
+
+                    <InputText @bind-Value="Publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-rounded tags pl-2">
-                    C# <button class="btn btn-primary form-rounded">X</button>
-                </label>
-            </div>
-                 <button type="button" class="btn btn-secondary form-rounded">Poser la question</button>
-            </div>
+                <div class="mb-3">
+                    <InputTextArea @bind-Value="Publication.PBC_description" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
+                </div>
+                <div class="mb-3 input-group">
+                    <input type="text" class="form-control form-rounded" placeholder="Tag" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary form-rounded" type="button" id="button-addon2">+</button>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-rounded tags pl-2">
+                        C# <button class="btn btn-primary form-rounded">X</button>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-secondary form-rounded">Poser la question</button>
+            </EditForm>
+        </div>
         <div class="col-sm">
             <Feed></Feed>
         </div>
@@ -39,5 +40,37 @@
 
 
 @code {
+    PublicationDto currentQuestion = new PublicationDto();
+    public PublicationDto Publication { get; set; } = new PublicationDto();
+    protected override async Task OnInitializedAsync()
+    {
+        await PublicationService.GetQuestions();
+        PublicationService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        PublicationService.OnChange -= StateHasChanged;
+    }
+
+    void Edit(int id)
+    {
+        currentQuestion = PublicationService.Questions.Find(h => h.PBC_id == id);
+    }
+
+    void Delete(int id)
+    {
+        PublicationService.DeleteQuestion(id);
+    }
+
+    void Update(int id)
+    {
+        currentQuestion = PublicationService.Questions.Find(h => h.PBC_id == id);
+    }
+
+    async void HandleSubmit()
+    {
+        await PublicationService.CreateQuestion(Publication);
+    }
 
 }

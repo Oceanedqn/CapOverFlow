@@ -1,16 +1,16 @@
 ﻿@inject ITagService TagService
 @inject ICategoryService CategoryService 
 
-<div class="continer-fluid">
+<div class="continer-fluid mt-5">
     <div class="row">
         <div class="col-12">
             @if (Tag.TAG_id == 0)
             {
-                <h4 class="mt-5">Create a new Tag</h4>
+                <h4>Create a new Tag</h4>
             }
             else
             {
-                <h4 class="mt-5"> Edit : @Tag.TAG_name</h4>
+                <h4> Edit : @Tag.TAG_name</h4>
             }
         </div>
         <div class="col-12">
@@ -60,7 +60,7 @@
         await CategoryService.GetCategories();
     }
 
-    async void BackToCreate()
+    void BackToCreate()
     {
         Tag = new TagDto();
 
@@ -69,10 +69,10 @@
 
     async void HandleSubmit()
     {
-        System.Diagnostics.Debug.WriteLine(Tag);
         if (Tag.TAG_id == 0)
         {
             await TagService.CreateTag(Tag);
+            Tag = new TagDto();
         }
         else
         {
