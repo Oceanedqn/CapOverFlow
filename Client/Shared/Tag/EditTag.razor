@@ -58,6 +58,11 @@
     {
         await TagService.GetTags();
         await CategoryService.GetCategories();
+
+        if(Tag.TAG_id != 0)
+        {
+            await TagService.GetTag(Tag.TAG_id);
+        }
     }
 
     void BackToCreate()
