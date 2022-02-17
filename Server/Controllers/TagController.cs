@@ -19,22 +19,22 @@ namespace CapOverFlow.Server.Controllers
             _context = context;
         }
 
-
         private async Task<List<TagDto>> GetDbTags()
         {
-            return await _context.Tags.ToListAsync();
+            return await _context.Tag.Include(ct => ct.Categories).ToListAsync();
         }
 
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
-            return Ok(await GetDbTags());
+            return base.Ok(await GetDbTags());
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTag(int id)
         {
-            var tag = await _context.Tags
+            var tag = await _context.Tag
+                .Include(ct => ct.Categories)
                 .FirstOrDefaultAsync(h => h.TAG_id == id);
             if (tag == null)
                 return NotFound("Super Hero wasn't found.");
@@ -44,7 +44,7 @@ namespace CapOverFlow.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTag(TagDto tag)
         {
-            _context.Tags.Add(tag);
+            _context.Tag.Add(tag);
             await _context.SaveChangesAsync();
 
             return Ok(await GetDbTags());
@@ -53,7 +53,8 @@ namespace CapOverFlow.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTag(TagDto tag)
         {
-            var dbTag = await _context.Tags
+            var dbTag = await _context.Tag
+                .Include(ct => ct.Categories)
                 .FirstOrDefaultAsync(h => h.TAG_id == tag.TAG_id);
             if (dbTag == null)
                 return NotFound("Super Hero wasn't found.");
@@ -69,12 +70,13 @@ namespace CapOverFlow.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTag(int id)
         {
-            var dbTag = await _context.Tags
+            var dbTag = await _context.Tag
+                .Include(ct => ct.Categories)
                 .FirstOrDefaultAsync(h => h.TAG_id == id);
             if (dbTag == null)
                 return NotFound("Super Hero wasn't found.");
 
-            _context.Tags.Remove(dbTag);
+            _context.Tag.Remove(dbTag);
             await _context.SaveChangesAsync();
             return Ok(await GetDbTags());
         }

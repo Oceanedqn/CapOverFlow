@@ -11,6 +11,7 @@ namespace CapOverFlow.Client.Services
         event Action OnChange;
 
         List<TagDto> Tags { get; set; }
+        //List<CategoryDto> Categories { get; set; }
 
         Task<List<TagDto>> GetTags();
 

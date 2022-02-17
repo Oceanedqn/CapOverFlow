@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CapOverFlow.Shared.Models
 {
     [Table("T_Include_ICD")]
-    public class IncludeDto
+    public partial class IncludeDto
     {
         public int TAG_id { get; set; }
         public int PBC_id { get; set; }
+
+        public PublicationDto Publication { get; set; }
+        public TagDto Tag { get; set; }
     }
 }

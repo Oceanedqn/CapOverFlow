@@ -21,18 +21,18 @@ namespace CapOverFlow.Client.Services
 
         public async Task<List<TagDto>> GetTags()
         {
-            Tags = await _httpClient.GetFromJsonAsync<List<TagDto>>($"api/Tag");
+            Tags = await _httpClient.GetFromJsonAsync<List<TagDto>>($"api/tag"); ;
             return Tags;
         }
 
         public async Task<TagDto> GetTag(int id)
         {
-            return await _httpClient.GetFromJsonAsync<TagDto>($"api/Tag/{id}");
+            return await _httpClient.GetFromJsonAsync<TagDto>($"api/tag/{id}");
         }
 
         public async Task<List<TagDto>> CreateTag(TagDto tag)
         {
-            var result = await _httpClient.PostAsJsonAsync<TagDto>($"api/Tag", tag);
+            var result = await _httpClient.PostAsJsonAsync<TagDto>($"api/tag", tag);
             Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
             OnChange.Invoke();
             return Tags;
@@ -41,7 +41,7 @@ namespace CapOverFlow.Client.Services
         public async Task<List<TagDto>> UpdateTag(TagDto tag)
         {
             Console.Write(tag);
-            var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/Tag/{tag.TAG_id}", tag);
+            var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/tag/{tag.TAG_id}", tag);
             Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
             OnChange.Invoke();
             return Tags;

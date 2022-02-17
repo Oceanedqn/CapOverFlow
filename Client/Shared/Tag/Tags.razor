@@ -3,83 +3,94 @@
 @inject ICategoryService CategoryService
 @inject NavigationManager NavigationManager
 @implements IDisposable
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <h3>Tools</h3>
-        </div>
-        <div class="col-12">
-            <p>Liste de tags</p>
-        </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col" style="height: 40vh; overflow-y: scroll;">
-                    @if (TagService == null)
-                    {
-                        <p><em>Loading...</em></p>
-                    }
-                    else
-                    {
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name </th>
-                                    <th>Category</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var tag in TagService.Tags)
-                                {
-                                    <tr>
-                                        <td>@tag.TAG_id</td>
-                                        <td>@tag.TAG_name</td>
-                                        <td>@(CategoryService.Cateogries.FirstOrDefault(category => category.CTG_id == tag.CTG_id).CTG_name)</td>
-                                        <td><button class="btn btn-primary" @onclick="(() => Edit(tag.TAG_id))">Edit</button></td>
-                                        <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TAG_id))">X</button></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h3>Tools</h3>
             </div>
-        </div>
-    </div>   
-</div>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6">
-            <EditTag Tag="currentTag"></EditTag>
+
+
+            @if (TagService.Tags.Count == 0)
+            {
+                <span> Loading tags ...</span>
+            }
+            else
+            {
+                <div class="col-12">
+                    <p>Liste de tags</p>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col" style="height: 40vh; overflow-y: scroll;">
+                            @if (TagService == null)
+                            {
+                                <p><em>Loading...</em></p>
+                            }
+                            else
+                            {
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name </th>
+                                            <th>Category</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var tag in TagService.Tags)
+                                        {
+                                            <tr>
+                                                <td>@tag.TAG_id</td>
+                                                <td>@tag.TAG_name</td>
+                                                <td>@tag.Categories.CTG_name</td>
+                                                <td><button class="btn btn-primary" @onclick="(() => Update(tag.TAG_id))">Edit</button></td>
+                                                <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TAG_id))">X</button></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+
 
         </div>
-        <div class="col-md-6">
-            <InfoTag Tag="currentTag"></InfoTag>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <EditTag Tag="currentTag"></EditTag>
+
+            </div>
+            <div class="col-md-6">
+                <InfoTag Tag="currentTag"></InfoTag>
+            </div>
         </div>
     </div>
-</div>
+
+
 
 
 
 @code {
     TagDto currentTag = new TagDto();
-    public CategoryDto Category { get; set; } = new CategoryDto();
+    
+    public List<TagDto> tags = new List<TagDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        await TagService.GetTags();
-        await CategoryService.GetCategories();
+       await TagService.GetTags();
         TagService.OnChange += StateHasChanged;
     }
 
-    public void Dispose()
-    {
-        TagService.OnChange -= StateHasChanged;
-    }
 
-    void Edit(int id)
+    void Update(int id)
     {
         currentTag = TagService.Tags.Find(h => h.TAG_id == id);
     }
@@ -89,10 +100,9 @@
         TagService.DeleteTag(id);
     }
 
-    void Update(int id)
+    public void Dispose()
     {
-        currentTag = TagService.Tags.Find(h => h.TAG_id == id);
+        TagService.OnChange -= StateHasChanged;
     }
-
 
 }

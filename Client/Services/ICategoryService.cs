@@ -8,12 +8,6 @@ namespace CapOverFlow.Client.Services
 {
     interface ICategoryService
     {
-        event Action OnChnge;
-
-        List<CategoryDto> Cateogries { get; set; }
-
-        CategoryDto Category { get; set; }
-
         Task<List<CategoryDto>> GetCategories();
 
         Task<CategoryDto> GetCategory(int id);

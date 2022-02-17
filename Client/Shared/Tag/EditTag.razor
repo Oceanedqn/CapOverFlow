@@ -1,5 +1,5 @@
 ﻿@inject ITagService TagService
-@inject ICategoryService CategoryService 
+@inject ICategoryService CategoryService
 
 <div class="continer-fluid mt-5">
     <div class="row">
@@ -23,7 +23,7 @@
                     <label>Categorie</label>
                     <InputSelect @bind-Value="Tag.CTG_id" class="form-control">
                         <option value="0"></option>
-                        @foreach (var category in CategoryService.Cateogries)
+                        @foreach (var category in Categories)
                         {
                             <option value="@category.CTG_id">@category.CTG_name</option>
                         }
@@ -52,14 +52,14 @@
 @code {
     [Parameter]
     public TagDto Tag { get; set; } = new TagDto();
-    public CategoryDto Category { get; set; } = new CategoryDto();
+    public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
 
     protected override async Task OnParametersSetAsync()
     {
-        await TagService.GetTags();
-        await CategoryService.GetCategories();
+        //await TagService.GetTags();
+        Categories =  await CategoryService.GetCategories();
 
-        if(Tag.TAG_id != 0)
+        if (Tag.TAG_id != 0)
         {
             await TagService.GetTag(Tag.TAG_id);
         }
@@ -70,7 +70,6 @@
         Tag = new TagDto();
 
     }
-
 
     async void HandleSubmit()
     {

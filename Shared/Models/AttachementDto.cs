@@ -1,21 +1,21 @@
-﻿using System;
+﻿using CapOverFlow.Shared.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CapOverFlow.Shared.Models
 {
     [Table("T_Attachement_ATC")]
-    public class AttachementDto
+    public partial class AttachementDto
     {
-        [Key]
         public int ATC_id { get; set; }
         public string ATC_name { get; set; }
         public string ATC_content { get; set; }
-        public int ATC_date { get; set; }
+        public DateTime ATC_date { get; set; }
         public int PBC_id { get; set; }
+
+        public PublicationDto Publication { get; set; }
     }
 }

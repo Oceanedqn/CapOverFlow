@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CapOverFlow.Shared.Models
 {
     [Table("T_Type_TYP")]
-    public class TypeDto
+    public partial class TypeDto
     {
-        [Key]
-        public int TYP_id { get; set; } = 0;
+        public TypeDto()
+        {
+            Publications = new HashSet<PublicationDto>();
+        }
+
+        public int TYP_id { get; set; }
         public string TYP_name { get; set; }
+
+        public ICollection<PublicationDto> Publications { get; set; }
     }
 }

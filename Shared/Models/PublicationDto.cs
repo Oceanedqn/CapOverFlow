@@ -1,23 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+#nullable disable
 
 namespace CapOverFlow.Shared.Models
 {
     [Table("T_Publication_PBC")]
-    public class PublicationDto
+    public partial class PublicationDto
     {
-        [Key]
-        public int PBC_id { get; set; } = 0;
+        public PublicationDto()
+        {
+            Attachements = new HashSet<AttachementDto>();
+            Includes = new List<IncludeDto>();
+        }
+
+        public int PBC_id { get; set; }
         public string PBC_title { get; set; }
         public string PBC_description { get; set; }
         public bool PBC_resolved { get; set; }
-        public int QST_date { get; set; }
+        public DateTime QST_date { get; set; }
         public int USR_id { get; set; }
         public int TYP_id { get; set; }
+
+        public TypeDto Type { get; set; }
+        public UserDto User { get; set; }
+        public ICollection<AttachementDto> Attachements { get; set; }
+        public List<IncludeDto> Includes { get; set; }
     }
 }

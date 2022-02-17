@@ -16,21 +16,17 @@ namespace CapOverFlow.Client.Services
             _httpClient = httpClient;
         }
 
-        public List<CategoryDto> Cateogries { get; set; } = new List<CategoryDto>();
-        public CategoryDto Category { get; set; } = new CategoryDto();
-
-        public event Action OnChnge;
+        //public List<CategoryDto> Cateogries { get; set; } = new List<CategoryDto>();
+        //public CategoryDto Category { get; set; } = new CategoryDto();
 
         public async Task<List<CategoryDto>> GetCategories()
         {
-            Cateogries = await _httpClient.GetFromJsonAsync<List<CategoryDto>>($"api/Category");
-            return Cateogries;
+            return await _httpClient.GetFromJsonAsync<List<CategoryDto>>($"api/category"); ;
         }
 
         public async Task<CategoryDto> GetCategory(int id)
         {
-            Category = await _httpClient.GetFromJsonAsync<CategoryDto>($"api/Category/{id}");
-            return Category;
+            return await _httpClient.GetFromJsonAsync<CategoryDto>($"api/category/{id}"); ;
         }
     }
 }

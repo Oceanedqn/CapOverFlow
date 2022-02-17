@@ -9,37 +9,45 @@
             <h4>Information</h4>
             <EditForm Model="Tag">
                 <div class="form-group">
-                    <label >Nom</label>
+                    <label>Nom</label>
                     <label class="form-control">@Tag.TAG_name</label>
                 </div>
                 <div class="form-group">
-                    <label >Categorie</label>
-                    <label class="form-control">@Category.CTG_name</label>
+                    <label>Categorie</label>
+                      @*<label class="form-control">@Tag.Categories.CTG_name</label>*@
                 </div>
                 <div class="form-group">
                     <label>Couleur</label>
-                    <label class="form-control" style="background-color:@Category.CTG_color; color:white;">@Category.CTG_color</label>
+                    @*  <label class="form-control" style="background-color:@Tag.Categories.CTG_color; color:white;">@Tag.Categories.CTG_color</label>*@
                 </div>
-            
+
             </EditForm>
         </div>
     </div>
 </div>
 
+
+
+
+
 @code {
 
     [Parameter]
     public TagDto Tag { get; set; } = new TagDto();
-    public CategoryDto Category { get; set; } = new CategoryDto();
+
 
     protected override async Task OnParametersSetAsync()
     {
-
-        if(Tag.TAG_id != 0)
+        if(Tag.TAG_id == null)
         {
-            Category = await CategoryService.GetCategory(Tag.CTG_id);
-            
+            Tag.TAG_id = 0;
+            Tag.TAG_name = "";
+            Tag.CTG_id = 0;
+            Tag.Categories.CTG_id = 0;
+            Tag.Categories.CTG_name = "";
+            Tag.Categories.CTG_color = "";
         }
+
     }
 
 }
