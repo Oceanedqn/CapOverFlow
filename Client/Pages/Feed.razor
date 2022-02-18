@@ -1,7 +1,6 @@
 ﻿@page "/feed"
-@inject IPublicationService PublicationService 
+@inject IPublicationService PublicationService
 @inject NavigationManager NavigationManager
-@implements IDisposable
 
 <h1>Feed</h1>
 
@@ -23,51 +22,47 @@ else
                 <th>Date</th>
                 <th>User</th>
                 <th>Type</th>
-                <th></th>
-                <th></th>
+                <th>Tag</th>
+
             </tr>
         </thead>
         <tbody>
-            @foreach (var question in PublicationService.Questions)
+            @foreach (var question in Publications)
             {
-            <tr>
-                <td>@question.PBC_id</td>
-                <td>@question.PBC_title</td>
-                <td>@question.PBC_description</td>
-                <td>@question.PBC_resolved</td>
-                <td>@question.QST_date</td>
-                <td>@question.USR_id</td>
-                <td>@question.TYP_id</td>
-                <td><button class="btn btn-primary" @onclick="(() => EditQuestion(question.PBC_id))">Edit</button></td>
-                <td><button class="btn btn-danger" @onclick="(() => DeleteQuestion(question.PBC_id))">X</button></td>
-            </tr>
+                <tr>
+                    <td>@question.PBC_id</td>
+                    <td>@question.PBC_title</td>
+                    <td>@question.PBC_description</td>
+                    <td>@question.PBC_resolved</td>
+                    <td>@question.QST_date</td>
+                    <td>@question.User.USR_firstname @question.User.USR_lastname</td>
+                    <td>@question.Type.TYP_name</td>
+                    @*@for (var i = question.PBC_id; i < PublicationService.Questions.Count(); i++)
+                    {
+                        var test = PublicationService.GetPubliTags(question.PBC_id);
+                        <td>@test.FirstOrDefault().PBC_title</td>
+                    }*@
+                </tr>
             }
         </tbody>
     </table>
 }
 
 @code {
-    //PublicationDto publicationEdit = new PublicationDto();
+    public List<PublicationDto> Publications { get; set; } = new List<PublicationDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        await PublicationService.GetQuestions();
-        //PublicationService.Onchange += StateHasChanged;
+        Publications = await PublicationService.GetQuestions();
+        //foreach (var question in Publications)
+        //{
+        //    for (var i = question.PBC_id; i < PublicationService.Questions.Count(); i++)
+        //    {
+        //        question. = PublicationService.GetPubliTags(question.PBC_id);
+        //    }
+        //}
+
     }
 
-    public void Dispose()
-    {
-        //PublicationService.Onchange -= StateHasChanged;
-    }
-
-    void EditQuestion(int id)
-        {
-
-        }
-
-    void DeleteQuestion(int id)
-        {
-
-        }
 
 }

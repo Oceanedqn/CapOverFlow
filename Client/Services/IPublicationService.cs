@@ -8,10 +8,20 @@ namespace CapOverFlow.Client.Services
 {
     public interface IPublicationService
     {
-        //event Action OnChange;
+        event Action OnChange;
 
-        List<PublicationDto> Publications { get; set; }
+        List<PublicationDto> Questions { get; set; }
 
-        Task<List<PublicationDto>> GetPublications();
+        Task<List<PublicationDto>> GetQuestions();
+
+        Task<PublicationDto> GetQuestion();
+
+        Task<List<PublicationDto>> CreateQuestion(PublicationDto publication);
+
+        Task<List<PublicationDto>> UpdateQuestion(PublicationDto publication);
+
+        Task<List<PublicationDto>> DeleteQuestion(int id);
+
+        Task<List<PublicationDto>> GetPubliTags(int id);
     }
 }

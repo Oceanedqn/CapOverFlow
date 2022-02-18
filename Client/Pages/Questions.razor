@@ -1,5 +1,6 @@
 ﻿@page "/questions"
 @inject IPublicationService PublicationService
+@inject ITagService TagService
 @inject NavigationManager NavigationManager
 @implements IDisposable
 
@@ -9,7 +10,6 @@
             <h3>Comment puis-je t'aider ?</h3>
             <EditForm Model="Publication" OnSubmit="HandleSubmit">
                 <div class="mb-3">
-
                     <InputText @bind-Value="Publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
                 </div>
                 <div class="mb-3">
@@ -40,7 +40,6 @@
 
 
 @code {
-    PublicationDto currentQuestion = new PublicationDto();
     public PublicationDto Publication { get; set; } = new PublicationDto();
     protected override async Task OnInitializedAsync()
     {
@@ -53,24 +52,10 @@
         PublicationService.OnChange -= StateHasChanged;
     }
 
-    void Edit(int id)
-    {
-        currentQuestion = PublicationService.Questions.Find(h => h.PBC_id == id);
-    }
-
-    void Delete(int id)
-    {
-        PublicationService.DeleteQuestion(id);
-    }
-
-    void Update(int id)
-    {
-        currentQuestion = PublicationService.Questions.Find(h => h.PBC_id == id);
-    }
-
     async void HandleSubmit()
     {
         await PublicationService.CreateQuestion(Publication);
+        Publication = new PublicationDto();
     }
 
 }

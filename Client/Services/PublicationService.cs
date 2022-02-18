@@ -17,14 +17,49 @@ namespace CapOverFlow.Client.Services
             _httpClient = httpClient;
         }
 
-        public List<PublicationDto> Publications { get; set; } = new List<PublicationDto>();
+        public event Action OnChange;
 
-        //public event Action OnChange;
+        public List<PublicationDto> Questions { get; set; } = new List<PublicationDto>();
 
-        public async Task<List<PublicationDto>> GetPublications()
+        public Task<PublicationDto> GetQuestion()
         {
-            Publications = await _httpClient.GetFromJsonAsync<List<PublicationDto>>("api/Publication");
-            return Publications;
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<PublicationDto>> GetQuestions()
+        {
+            Questions = await _httpClient.GetFromJsonAsync<List<PublicationDto>>("api/publication");
+            return Questions;
+        }
+
+        public async Task<List<PublicationDto>> GetPubliTags(int publiID)
+        {
+            Questions = await _httpClient.GetFromJsonAsync<List<PublicationDto>>($"api/publication/tags/{publiID}");
+            return Questions;
+        }
+
+        public async Task<List<PublicationDto>> CreateQuestion(PublicationDto publication)
+        {
+            var result = await _httpClient.PostAsJsonAsync<PublicationDto>($"api/Publication", publication);
+            Questions = await result.Content.ReadFromJsonAsync<List<PublicationDto>>();
+            OnChange.Invoke();
+            return Questions;
+        }
+
+        public async Task<List<PublicationDto>> UpdateQuestion(PublicationDto publication)
+        {
+            var result = await _httpClient.PutAsJsonAsync<PublicationDto>($"api/Publication/{publication.PBC_id}", publication);
+            Questions = await result.Content.ReadFromJsonAsync<List<PublicationDto>>();
+            OnChange.Invoke();
+            return Questions;
+        }
+
+        public async Task<List<PublicationDto>> DeleteQuestion(int id)
+        {
+            var result = await _httpClient.DeleteAsync($"api/Publication/{id}");
+            Questions = await result.Content.ReadFromJsonAsync<List<PublicationDto>>();
+            OnChange.Invoke();
+            return Questions;
         }
     }
 }
