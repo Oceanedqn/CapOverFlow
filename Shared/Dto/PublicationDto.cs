@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
-namespace CapOverFlow.Shared.Models
+namespace CapOverFlow.Shared.Dto
 {
     [Table("T_Publication_PBC")]
     public partial class PublicationDto

@@ -1,11 +1,11 @@
-﻿using CapOverFlow.Shared.Models;
+﻿using CapOverFlow.Shared.Dto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
-namespace CapOverFlow.Shared.Models
+namespace CapOverFlow.Shared.Dto
 {
     [Table("T_Attachement_ATC")]
     public partial class AttachementDto

@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using CapOverFlow.Shared.Models;
+using CapOverFlow.Shared.Dto;
 
 #nullable disable
 

@@ -1,32 +1,21 @@
 ﻿using CapOverFlow.Server.Data;
+using CapOverFlow.Shared.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CapOverFlow.Shared.Dto;
 
 namespace CapOverFlow.Server.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class IncludeController : ControllerBase
+    public class EntityControllerBase : ControllerBase
     {
-
         private readonly DataContext _context;
-        public IncludeController(DataContext context)
+        public EntityControllerBase(DataContext context)
         {
             _context = context;
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> GetIncludes()
-        {
-            return Ok(await _context.Include.ToListAsync());
-        }
     }
-
-    
 }

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CapOverFlow.Shared.Models;
+using CapOverFlow.Shared.Dto;
 
 namespace CapOverFlow.Server.Controllers
 {
@@ -22,7 +22,9 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            return Ok(await _context.Users.ToListAsync());
+            return Ok(await _context.User
+                .Include(pb => pb.Publications)
+                .ToListAsync());
         }
     }
 }

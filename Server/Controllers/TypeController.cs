@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CapOverFlow.Shared.Models;
+using CapOverFlow.Shared.Dto;
 using CapOverFlow.Server.Data;
 
 namespace CapOverFlow.Server.Controllers
@@ -22,7 +22,9 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTypes()
         {
-            return Ok(await _context.Tags.ToListAsync());
+            return Ok(await _context.Type
+                .Include(pb => pb.Publications)
+                .ToListAsync());
         }
 
 

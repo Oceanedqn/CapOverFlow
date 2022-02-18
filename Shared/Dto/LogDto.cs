@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace CapOverFlow.Shared.Models
+namespace CapOverFlow.Shared.Dto
 {
     public partial class LogDto
     {

@@ -1,4 +1,5 @@
-﻿using CapOverFlow.Shared.Models;
+﻿using CapOverFlow.Client.Services.Interfaces;
+using CapOverFlow.Shared.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;

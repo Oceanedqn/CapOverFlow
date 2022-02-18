@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CapOverFlow.Shared.Models;
+using CapOverFlow.Shared.Dto;
 using CapOverFlow.Server.Data;
 
 namespace CapOverFlow.Server.Controllers
@@ -21,7 +21,9 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<List<TagDto>> GetDbTags()
         {
-            return await _context.Tag.Include(ct => ct.Categories).ToListAsync();
+            return await _context.Tag
+                .Include(ct => ct.Categories)
+                .ToListAsync();
         }
 
         [HttpGet]
