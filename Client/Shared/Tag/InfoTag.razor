@@ -14,11 +14,11 @@
                 </div>
                 <div class="form-group">
                     <label>Categorie</label>
-                      @*<label class="form-control">@Tag.Categories.CTG_name</label>*@
+                      <label class="form-control">@Tag.Categories.CTG_name</label>
                 </div>
                 <div class="form-group">
                     <label>Couleur</label>
-                    @*  <label class="form-control" style="background-color:@Tag.Categories.CTG_color; color:white;">@Tag.Categories.CTG_color</label>*@
+                      <label class="form-control" style="background-color:@Tag.Categories.CTG_color; color:white;">@Tag.Categories.CTG_color</label>
                 </div>
 
             </EditForm>
@@ -34,20 +34,24 @@
 
     [Parameter]
     public TagDto Tag { get; set; } = new TagDto();
-
+    public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Tag.TAG_id == null)
+        if (Tag.TAG_id != 0)
         {
-            Tag.TAG_id = 0;
-            Tag.TAG_name = "";
-            Tag.CTG_id = 0;
-            Tag.Categories.CTG_id = 0;
-            Tag.Categories.CTG_name = "";
-            Tag.Categories.CTG_color = "";
+            await TagService.GetTag(Tag.TAG_id);
         }
-
+        if(Tag.Categories == null)
+        {
+            Tag = new TagDto()
+            {
+                TAG_id = 0,
+                TAG_name = "",
+                CTG_id = 0,
+                Categories = new CategoryDto()
+            };
+        }
     }
 
 }

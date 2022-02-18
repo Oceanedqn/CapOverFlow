@@ -56,7 +56,6 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        //await TagService.GetTags();
         Categories =  await CategoryService.GetCategories();
 
         if (Tag.TAG_id != 0)
