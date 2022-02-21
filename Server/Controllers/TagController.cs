@@ -23,6 +23,7 @@ namespace CapOverFlow.Server.Controllers
         {
             return await _context.Tag
                 .Include(ct => ct.Categories)
+                .Include(ic => ic.Includes)
                 .ToListAsync();
         }
 
@@ -37,6 +38,7 @@ namespace CapOverFlow.Server.Controllers
         {
             var tag = await _context.Tag
                 .Include(ct => ct.Categories)
+                .Include(ic => ic.Includes)
                 .FirstOrDefaultAsync(h => h.TAG_id == id);
             if (tag == null)
                 return NotFound("Super Hero wasn't found.");

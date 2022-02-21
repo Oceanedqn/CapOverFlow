@@ -33,12 +33,6 @@ namespace CapOverFlow.Client.Services
             return Questions;
         }
 
-        public async Task<List<PublicationDto>> GetPubliTags(int publiID)
-        {
-            Questions = await _httpClient.GetFromJsonAsync<List<PublicationDto>>($"api/publication/tags/{publiID}");
-            return Questions;
-        }
-
         public async Task<List<PublicationDto>> CreateQuestion(PublicationDto publication)
         {
             var result = await _httpClient.PostAsJsonAsync<PublicationDto>($"api/Publication", publication);

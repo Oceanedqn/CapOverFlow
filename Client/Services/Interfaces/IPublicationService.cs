@@ -21,7 +21,5 @@ namespace CapOverFlow.Client.Services.Interfaces
         Task<List<PublicationDto>> UpdateQuestion(PublicationDto publication);
 
         Task<List<PublicationDto>> DeleteQuestion(int id);
-
-        Task<List<PublicationDto>> GetPubliTags(int id);
     }
 }

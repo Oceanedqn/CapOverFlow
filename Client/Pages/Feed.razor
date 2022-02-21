@@ -37,11 +37,12 @@ else
                     <td>@question.QST_date</td>
                     <td>@question.User.USR_firstname @question.User.USR_lastname</td>
                     <td>@question.Type.TYP_name</td>
-                    @*@for (var i = question.PBC_id; i < PublicationService.Questions.Count(); i++)
-                    {
-                        var test = PublicationService.GetPubliTags(question.PBC_id);
-                        <td>@test.FirstOrDefault().PBC_title</td>
-                    }*@
+                    <td>
+                        @foreach (var include in question.Includes)
+                        {
+                        <p>@include.Tag.TAG_name;</p> 
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

@@ -24,6 +24,8 @@ namespace CapOverFlow.Server.Controllers
             return await _context.Publication
                 .Include(us => us.User)
                 .Include(ty => ty.Type)
+                .Include(ic => ic.Includes)
+                .ThenInclude(ic => ic.Tag)
                 .ToListAsync();
         }
 
@@ -40,6 +42,8 @@ namespace CapOverFlow.Server.Controllers
             var question = await _context.Publication
                 .Include(us => us.User)
                 .Include(ty => ty.Type)
+                .Include(ic => ic.Includes)
+                .ThenInclude(ic => ic.Tag)
                 .FirstOrDefaultAsync(h => h.PBC_id == id);
             if (question == null)
                 return NotFound("Question wasn't found.");
@@ -52,8 +56,8 @@ namespace CapOverFlow.Server.Controllers
 
             publication.PBC_resolved = false;
             publication.QST_date = DateTime.Now;
-            publication.User.USR_id = 1;
-            publication.Type.TYP_id = 1;
+            publication.USR_id = 1;
+            publication.TYP_id = 1;
 
             _context.Publication.Add(publication);
             await _context.SaveChangesAsync();
@@ -72,8 +76,8 @@ namespace CapOverFlow.Server.Controllers
             dbPubli.PBC_description = publication.PBC_description;
             dbPubli.PBC_resolved = publication.PBC_resolved;
             dbPubli.QST_date = DateTime.Now;
-            dbPubli.Type.TYP_id = 1;
-            dbPubli.User.USR_id = 1;
+            dbPubli.TYP_id = 1;
+            dbPubli.USR_id = 1;
 
             await _context.SaveChangesAsync();
 

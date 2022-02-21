@@ -183,9 +183,6 @@ namespace CapOverFlow.Server.Data
                     .HasForeignKey(d => d.USR_id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("T_Publication_PBC_T_User_USR_FK");
-
-                entity.HasMany(i => i.Includes)
-                    .WithOne();
             });
 
             modelBuilder.Entity<TagDto>(entity =>

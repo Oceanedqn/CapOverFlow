@@ -1,11 +1,7 @@
 ﻿using CapOverFlow.Server.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using CapOverFlow.Shared.Dto;
 
 namespace CapOverFlow.Server.Controllers
 {
@@ -24,9 +20,10 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetIncludes()
         {
-            return Ok(await _context.Include.ToListAsync());
+            return Ok(await _context.Include
+                .Include(pb => pb.Publication)
+                .Include(ta => ta.Publication)
+                .ToListAsync());
         }
     }
-
-    
 }

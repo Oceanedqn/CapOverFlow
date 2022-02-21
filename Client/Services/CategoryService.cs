@@ -22,12 +22,12 @@ namespace CapOverFlow.Client.Services
 
         public async Task<List<CategoryDto>> GetCategories()
         {
-            return await _httpClient.GetFromJsonAsync<List<CategoryDto>>($"api/category"); ;
+            return await _httpClient.GetFromJsonAsync<List<CategoryDto>>($"api/category");
         }
 
         public async Task<CategoryDto> GetCategory(int id)
         {
-            return await _httpClient.GetFromJsonAsync<CategoryDto>($"api/category/{id}"); ;
+            return await _httpClient.GetFromJsonAsync<CategoryDto>($"api/category/{id}");
         }
     }
 }
