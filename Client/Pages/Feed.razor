@@ -27,7 +27,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var question in Publications)
+            @foreach (var question in PublicationService.Questions)
             {
                 <tr>
                     <td>@question.PBC_id</td>
@@ -49,20 +49,17 @@ else
 }
 
 @code {
-    public List<PublicationDto> Publications { get; set; } = new List<PublicationDto>();
+    public List<PublicationDto> Publications = new List<PublicationDto>();
 
     protected override async Task OnInitializedAsync()
     {
         Publications = await PublicationService.GetQuestions();
-        //foreach (var question in Publications)
-        //{
-        //    for (var i = question.PBC_id; i < PublicationService.Questions.Count(); i++)
-        //    {
-        //        question. = PublicationService.GetPubliTags(question.PBC_id);
-        //    }
-        //}
-
+        PublicationService.OnChange += StateHasChanged;
     }
 
+    public void Dispose()
+    {
+        PublicationService.OnChange -= StateHasChanged;
+    }
 
 }
