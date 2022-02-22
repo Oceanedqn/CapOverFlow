@@ -1,30 +1,40 @@
 ﻿@page "/questions"
 @inject IPublicationService PublicationService
 @inject ITagService TagService
+@inject IIncludeService IncludeService
 @inject NavigationManager NavigationManager
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm">
             <h3>Comment puis-je t'aider ?</h3>
-            <EditForm Model="publication" OnSubmit="HandleSubmit">
+            <EditForm Model="Publication" OnValidSubmit="HandleValidSubmit">
                 <div class="mb-3">
-                    <InputText @bind-Value="publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
+                    <InputText @bind-Value="Publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
                 </div>
                 <div class="mb-3">
-                    <InputTextArea @bind-Value="publication.PBC_description" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
+                    <InputTextArea @bind-Value="Publication.PBC_description" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
                 </div>
-                <div class="mb-3 input-group">
-                    <input type="text" class="form-control form-rounded" placeholder="Tag" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-primary form-rounded" type="button" id="button-addon2">+</button>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label class="form-rounded tags pl-2">
-                        C# <button class="btn btn-primary form-rounded">X</button>
+                @*Tag input*@
+            <div class="mb-3 input-group">
+                <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button class="btn btn-primary" @onclick="() => AddTagInListTagPubli(CurrentTag.TAG_name)">+</button>
+                <datalist id="txtsearch">
+                    @foreach (var tag in TagsList)
+                    {
+                        <option value="@tag.TAG_name"></option>
+                    }
+                </datalist>
+            </div>
+                @*Tag vignette*@
+            <div class="mb-3">
+                @foreach (TagDto tag in ChooseTag)
+                {
+                    <label class="form-rounded pl-2" value="@tag.TAG_id" style="background-color:@tag.Categories.CTG_color;">
+                        @tag.TAG_name <button class="btn btn-primary form-rounded">X</button>
                     </label>
-                </div>
+                }
+            </div>
+                @*Bouton Poser la question*@
                 <button type="submit" class="btn btn-secondary form-rounded">Poser la question</button>
             </EditForm>
         </div>
@@ -39,19 +49,47 @@
 
 
 @code {
-    PublicationDto publication = new PublicationDto();
+    PublicationDto Publication = new PublicationDto();
+    List<PublicationDto> PubliList = new List<PublicationDto>();
+    List<IncludeDto> Includes = new List<IncludeDto>();
+    List<TagDto> TagsList = new List<TagDto>();
+    List<TagDto> ChooseTag = new List<TagDto>();
+    TagDto CurrentTag = new TagDto();
 
     protected override async Task OnInitializedAsync()
     {
-        await TagService.GetTags();
+        TagsList = await TagService.GetTags();
+        PubliList = await PublicationService.GetQuestions();
     }
 
-    async void HandleSubmit()
+    async void HandleValidSubmit()
     {
-        if (publication.PBC_id == 0)
+        //if (Publication.PBC_id == 0)
+        //{
+
+        //    await PublicationService.CreateQuestion(Publication);
+        //    Publication = new PublicationDto();
+
+        //    foreach (var tag in ChooseTag){
+        //        await IncludeService.CreateInclude(new IncludeDto
+        //        { 
+        //            PBC_id = PubliList.Last().PBC_id+1,
+        //            TAG_id = tag.TAG_id
+        //        });
+        //    }
+
+
+
+
+
+        //}
+    }
+
+    public void AddTagInListTagPubli(string name)
+    {
+        if (CurrentTag.TAG_name != "")
         {
-            await PublicationService.CreateQuestion(publication);
-            publication = new PublicationDto();
+            ChooseTag.Add(TagsList.FirstOrDefault(h => h.TAG_name == name));
         }
     }
 }
