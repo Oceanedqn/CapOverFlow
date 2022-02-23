@@ -8,6 +8,11 @@ namespace CapOverFlow.Client.Services.Interfaces
 {
     interface IIncludeService
     {
+        event Action OnChange;
+        List<IncludeDto> Includes { get; set; }
         Task<List<IncludeDto>> GetIncludes();
+        Task<List<IncludeDto>> CreateInclude(IncludeDto include);
+
+
     }
 }

@@ -16,11 +16,22 @@ namespace CapOverFlow.Client.Services
         {
             _httpClient = httpClient;
         }
+        public List<IncludeDto> Includes { get; set; } = new List<IncludeDto>();
+        
+        public event Action OnChange;
 
         public async Task<List<IncludeDto>> GetIncludes()
         {
-            return await _httpClient.GetFromJsonAsync<List<IncludeDto>>($"api/include");
+            Includes = await _httpClient.GetFromJsonAsync<List<IncludeDto>>("api/include");
+            return Includes;
         }
 
+        public async Task<List<IncludeDto>> CreateInclude(IncludeDto include)
+        {
+            var result = await _httpClient.PostAsJsonAsync<IncludeDto>($"api/include", include);
+            Includes = await result.Content.ReadFromJsonAsync<List<IncludeDto>>();
+            //OnChange.Invoke();
+            return Includes;
+        }
     }
 }

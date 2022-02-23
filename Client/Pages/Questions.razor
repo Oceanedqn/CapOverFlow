@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-sm">
             <h3>Comment puis-je t'aider ?</h3>
-            <EditForm Model="Publication" OnValidSubmit="HandleValidSubmit">
+            <EditForm Model="Publication" OnValidSubmit="HandleSubmit">
                 <div class="mb-3">
                     <InputText @bind-Value="Publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
                 </div>
@@ -17,7 +17,7 @@
                 </div>
                 @*Tag input*@
             <div class="mb-3 input-group">
-                <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button class="btn btn-primary" @onclick="() => AddTagInListTagPubli(CurrentTag.TAG_name)">+</button>
+                <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button type="button" class="btn btn-primary" @onclick="() => AddTagInListTagPubli(CurrentTag.TAG_name)">+</button>
                 <datalist id="txtsearch">
                     @foreach (var tag in TagsList)
                     {
@@ -29,8 +29,8 @@
             <div class="mb-3">
                 @foreach (TagDto tag in ChooseTag)
                 {
-                    <label class="form-rounded pl-2" value="@tag.TAG_id" style="background-color:@tag.Categories.CTG_color;">
-                        @tag.TAG_name <button class="btn btn-primary form-rounded">X</button>
+                    <label class="form-rounded pl-2 mr-2" value="@tag.TAG_id" style="background-color:@tag.Categories.CTG_color;">
+                        @tag.TAG_name <button type="button" class="btn btn-primary form-rounded" @onclick="() => RemoveTagInListTagPubli(tag.TAG_name)">X</button>
                     </label>
                 }
             </div>
@@ -38,7 +38,7 @@
                 <button type="submit" class="btn btn-secondary form-rounded">Poser la question</button>
             </EditForm>
         </div>
-        <div class="col-sm">
+        <div class="col-sm" style="height: 90vh; overflow-y: scroll;">
             <Feed></Feed>
         </div>
     </div>
@@ -62,27 +62,29 @@
         PubliList = await PublicationService.GetQuestions();
     }
 
-    async void HandleValidSubmit()
+
+
+    async void HandleSubmit()
     {
-        //if (Publication.PBC_id == 0)
-        //{
+        if(Publication.PBC_id == 0)
+        {
+            await PublicationService.CreateQuestion(Publication);
+            Publication = new PublicationDto();
 
-        //    await PublicationService.CreateQuestion(Publication);
-        //    Publication = new PublicationDto();
+            var idPubli = PubliList.Last().PBC_id + 1;
+            if(ChooseTag.Count != 0)
+            {
+                foreach (var tag in ChooseTag)
+                {
+                    await IncludeService.CreateInclude(new IncludeDto
+                    {
+                        PBC_id = idPubli,
+                        TAG_id = tag.TAG_id
+                    });
+                }
+            }
 
-        //    foreach (var tag in ChooseTag){
-        //        await IncludeService.CreateInclude(new IncludeDto
-        //        { 
-        //            PBC_id = PubliList.Last().PBC_id+1,
-        //            TAG_id = tag.TAG_id
-        //        });
-        //    }
-
-
-
-
-
-        //}
+        }
     }
 
     public void AddTagInListTagPubli(string name)
@@ -90,6 +92,12 @@
         if (CurrentTag.TAG_name != "")
         {
             ChooseTag.Add(TagsList.FirstOrDefault(h => h.TAG_name == name));
+            CurrentTag = new TagDto();
         }
+    }
+
+    public void RemoveTagInListTagPubli(string name)
+    {
+        ChooseTag.Remove(TagsList.FirstOrDefault(h => h.TAG_name == name));
     }
 }

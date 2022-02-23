@@ -16,10 +16,10 @@ namespace CapOverFlow.Client
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
             builder.Services.AddScoped<IPublicationService, PublicationService>();
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IIncludeService, IncludeService>();
 
             await builder.Build().RunAsync();
         }
