@@ -29,6 +29,19 @@ namespace CapOverFlow.Server.Controllers
                 .ToListAsync();
         }
 
+        private async Task<PublicationDto> GetPublicationById(int id)
+        {
+            var question = await _context.Publication
+                .Include(us => us.User)
+                .Include(ty => ty.Type)
+                .Include(ic => ic.Includes)
+                .ThenInclude(ic => ic.Tag)
+                .FirstOrDefaultAsync(h => h.PBC_id == id);
+            return question;
+        }
+
+
+
         [HttpGet]
         public async Task<IActionResult> GetQuestions()
         {
@@ -39,14 +52,7 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetQuestion(int id)
         {
-            var question = await _context.Publication
-                .Include(us => us.User)
-                .Include(ty => ty.Type)
-                .Include(ic => ic.Includes)
-                .ThenInclude(ic => ic.Tag)
-                .FirstOrDefaultAsync(h => h.PBC_id == id);
-            if (question == null)
-                return NotFound("Question wasn't found.");
+            var question = await GetPublicationById(id);         
             return Ok(question);
         }
 
@@ -61,7 +67,8 @@ namespace CapOverFlow.Server.Controllers
 
             _context.Publication.Add(publication);
             await _context.SaveChangesAsync();
-            return Ok(await GetDbPublications());
+
+            return Ok(await GetPublicationById(publication.PBC_id));
         }
 
         [HttpPut("{id}")]
@@ -69,9 +76,7 @@ namespace CapOverFlow.Server.Controllers
         {
             var dbPubli = await _context.Publication
                 .FirstOrDefaultAsync(h => h.PBC_id == publication.PBC_id);
-            if (dbPubli == null)
-                return NotFound("Question wasn't found.");
-
+           
             dbPubli.PBC_title = publication.PBC_title;
             dbPubli.PBC_description = publication.PBC_description;
             dbPubli.PBC_resolved = publication.PBC_resolved;
@@ -80,7 +85,6 @@ namespace CapOverFlow.Server.Controllers
             dbPubli.USR_id = 1;
 
             await _context.SaveChangesAsync();
-
             return Ok(await GetDbPublications());
         }
 
@@ -89,8 +93,6 @@ namespace CapOverFlow.Server.Controllers
         {
             var dbHPubli = await _context.Publication
                 .FirstOrDefaultAsync(h => h.PBC_id == id);
-            if (dbHPubli == null)
-                return NotFound("Question wasn't found.");
 
             _context.Publication.Remove(dbHPubli);
             await _context.SaveChangesAsync();

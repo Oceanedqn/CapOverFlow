@@ -28,6 +28,15 @@ namespace CapOverFlow.Server.Controllers
                 .ToListAsync();
         }
 
+        private async Task<TagDto> GetTagById(int id)
+        {
+            var tag = await _context.Tag
+                .Include(ct => ct.Categories)
+                .Include(ic => ic.Includes)
+                .FirstOrDefaultAsync(h => h.TAG_id == id);
+            return tag;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
@@ -38,18 +47,7 @@ namespace CapOverFlow.Server.Controllers
         public async Task<IActionResult> GetTag(int id)
         {
             var tag = await GetTagById(id);
-            if (tag == null)
-                return NotFound("Tag wasn't found.");
             return Ok(tag);
-        }
-
-        private async Task<TagDto> GetTagById(int id)
-        {
-            var tag = await _context.Tag
-                .Include(ct => ct.Categories)
-                .Include(ic => ic.Includes)
-                .FirstOrDefaultAsync(h => h.TAG_id == id);
-            return tag;
         }
 
         [HttpPost]
@@ -69,8 +67,8 @@ namespace CapOverFlow.Server.Controllers
           
             dbTag.TAG_name = tag.TAG_name;
             dbTag.CTG_id = tag.CTG_id;
-            await _context.SaveChangesAsync();
 
+            await _context.SaveChangesAsync();
             return Ok(await GetDbTags());
         }
 

@@ -3,6 +3,7 @@
 @inject ITagService TagService
 @inject IIncludeService IncludeService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <div class="container-fluid">
     <div class="row">
@@ -16,24 +17,24 @@
                     <InputTextArea @bind-Value="Publication.PBC_description" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
                 </div>
                 @*Tag input*@
-            <div class="mb-3 input-group">
-                <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button type="button" class="btn btn-primary" @onclick="() => AddTagInListTagPubli(CurrentTag.TAG_name)">+</button>
-                <datalist id="txtsearch">
-                    @foreach (var tag in TagsList)
-                    {
-                        <option value="@tag.TAG_name"></option>
-                    }
-                </datalist>
-            </div>
+                <div class="mb-3 input-group">
+                    <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button type="button" class="btn btn-primary" @onclick="() => AddTagInListTagPubli(CurrentTag.TAG_name)">+</button>
+                    <datalist id="txtsearch">
+                        @foreach (var tag in TagsList)
+                        {
+                            <option value="@tag.TAG_name"></option>
+                        }
+                    </datalist>
+                </div>
                 @*Tag vignette*@
-            <div class="mb-3">
-                @foreach (TagDto tag in ChooseTag)
-                {
-                    <label class="form-rounded pl-2 mr-2" value="@tag.TAG_id" style="background-color:@tag.Categories.CTG_color;">
-                        @tag.TAG_name <button type="button" class="btn btn-primary form-rounded" @onclick="() => RemoveTagInListTagPubli(tag.TAG_name)">X</button>
-                    </label>
-                }
-            </div>
+                <div class="mb-3">
+                    @foreach (TagDto tag in ChooseTag)
+                    {
+                        <label class="form-rounded pl-2 mr-2" value="@tag.TAG_id" style="background-color:@tag.Categories.CTG_color;">
+                            @tag.TAG_name <button type="button" class="btn btn-primary form-rounded" @onclick="() => RemoveTagInListTagPubli(tag)">X</button>
+                        </label>
+                    }
+                </div>
                 @*Bouton Poser la question*@
                 <button type="submit" class="btn btn-secondary form-rounded">Poser la question</button>
             </EditForm>
@@ -58,29 +59,29 @@
 
     protected override async Task OnInitializedAsync()
     {
-        TagsList = await TagService.GetTags();
-        PubliList = await PublicationService.GetQuestions();
+        TagsList = await TagService.GetEntities();
+        PubliList = await PublicationService.GetEntities();
+        IncludeService.OnChange += StateHasChanged;
     }
 
 
 
     async void HandleSubmit()
     {
-        if(Publication.PBC_id == 0)
+        if (Publication.PBC_id == 0)
         {
-            await PublicationService.CreateQuestion(Publication);
+            var test = await PublicationService.CreateEntity(Publication);
             Publication = new PublicationDto();
 
-            var idPubli = PubliList.Last().PBC_id + 1;
-            if(ChooseTag.Count != 0)
+            if (ChooseTag.Count != 0)
             {
                 foreach (var tag in ChooseTag)
                 {
                     await IncludeService.CreateInclude(new IncludeDto
                     {
-                        PBC_id = idPubli,
+                        PBC_id = test.PBC_id,
                         TAG_id = tag.TAG_id
-                    });
+                    }); ;
                 }
             }
 
@@ -91,13 +92,28 @@
     {
         if (CurrentTag.TAG_name != "")
         {
-            ChooseTag.Add(TagsList.FirstOrDefault(h => h.TAG_name == name));
-            CurrentTag = new TagDto();
+            var temp = TagsList.FirstOrDefault(h => h.TAG_name == name);
+
+            if (ChooseTag.Contains(temp))
+            {
+                CurrentTag = new TagDto();
+            }
+            else
+            {
+                ChooseTag.Add(temp);
+                CurrentTag = new TagDto();
+
+            }
         }
     }
 
-    public void RemoveTagInListTagPubli(string name)
+    public void RemoveTagInListTagPubli(TagDto tag)
     {
-        ChooseTag.Remove(TagsList.FirstOrDefault(h => h.TAG_name == name));
+        ChooseTag.Remove(TagsList.FirstOrDefault(h => h.TAG_id == tag.TAG_id));
+    }
+
+    public void Dispose()
+    {
+        IncludeService.OnChange -= StateHasChanged;
     }
 }

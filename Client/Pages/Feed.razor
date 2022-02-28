@@ -27,7 +27,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var question in PublicationService.Questions)
+            @foreach (var question in PublicationService.Entities)
             {
                 <tr>
                     <td>@question.PBC_id</td>
@@ -54,7 +54,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Publications = await PublicationService.GetQuestions();
+        Publications = await PublicationService.GetEntities();
         PublicationService.OnChange += StateHasChanged;
     }
 

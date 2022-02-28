@@ -19,23 +19,5 @@ namespace CapOverFlow.Client.Services
         
 
 
-        //public async Task<TagDto> UpdateTag(TagDto tag)
-        //{
-        //    Console.Write(tag);
-        //    var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/tag/{tag.TAG_id}", tag);
-        //    var temp = await result.Content.ReadFromJsonAsync<TagDto>();
-        //    Tags.Add(temp); 
-        //    OnChange.Invoke();
-        //    return temp;
-        //}
-
-        //public async Task<TagDto> DeleteTag(int id)
-        //{
-        //    var result = await _httpClient.DeleteAsync($"api/Tag/{id}");
-        //    var temp = await result.Content.ReadFromJsonAsync<List<TagDto>>();
-        //    Tags.Remove(temp.Last());
-        //    OnChange.Invoke();
-        //    return temp.Last();
-        //}        
     }
 }
