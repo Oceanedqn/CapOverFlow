@@ -9,29 +9,10 @@ using CapOverFlow.Client.Services.Interfaces;
 
 namespace CapOverFlow.Client.Services
 {
-    public class IncludeService : IIncludeService
+    public class IncludeService : BaseService<IncludeDto>, IIncludeService
     {
-        private readonly HttpClient _httpClient;
-        public IncludeService(HttpClient httpClient)
+        public IncludeService(HttpClient httpClient) : base(httpClient, "include")
         {
-            _httpClient = httpClient;
-        }
-        public List<IncludeDto> Includes { get; set; } = new List<IncludeDto>();
-        
-        public event Action OnChange;
-
-        public async Task<List<IncludeDto>> GetIncludes()
-        {
-            Includes = await _httpClient.GetFromJsonAsync<List<IncludeDto>>("api/include");
-            return Includes;
-        }
-
-        public async Task<List<IncludeDto>> CreateInclude(IncludeDto include)
-        {
-            var result = await _httpClient.PostAsJsonAsync<IncludeDto>($"api/include", include);
-            Includes = await result.Content.ReadFromJsonAsync<List<IncludeDto>>();
-            //OnChange.Invoke();
-            return Includes;
         }
     }
 }

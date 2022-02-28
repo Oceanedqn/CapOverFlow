@@ -25,6 +25,18 @@ namespace CapOverFlow.Server.Controllers
                 .ToListAsync();
         }
 
+        private async Task<List<IncludeDto>> GetIncludeById(int publiId)
+        {
+            List<IncludeDto> includes = await GetDbIncludes();
+            foreach (var include in includes){
+                if(include.PBC_id != publiId)
+                {
+                    includes.Remove(include);
+                }
+            }
+            return includes;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetIncludes()
         {
@@ -37,7 +49,7 @@ namespace CapOverFlow.Server.Controllers
             _context.Include.Add(include);
             await _context.SaveChangesAsync();
 
-            return Ok(await GetDbIncludes());
+            return Ok(include);
         }
     }
 }

@@ -71,19 +71,21 @@
         if (Publication.PBC_id == 0)
         {
             var test = await PublicationService.CreateEntity(Publication);
-            Publication = new PublicationDto();
+
 
             if (ChooseTag.Count != 0)
             {
                 foreach (var tag in ChooseTag)
                 {
-                    await IncludeService.CreateInclude(new IncludeDto
+                    await IncludeService.CreateEntity(new IncludeDto
                     {
                         PBC_id = test.PBC_id,
                         TAG_id = tag.TAG_id
                     }); ;
                 }
             }
+            await PublicationService.UpdateEntity(test, test.PBC_id);
+            Publication = new PublicationDto();
 
         }
     }
@@ -94,16 +96,11 @@
         {
             var temp = TagsList.FirstOrDefault(h => h.TAG_name == name);
 
-            if (ChooseTag.Contains(temp))
-            {
-                CurrentTag = new TagDto();
-            }
-            else
+            if (!ChooseTag.Contains(temp))
             {
                 ChooseTag.Add(temp);
-                CurrentTag = new TagDto();
-
             }
+            CurrentTag = new TagDto();
         }
     }
 

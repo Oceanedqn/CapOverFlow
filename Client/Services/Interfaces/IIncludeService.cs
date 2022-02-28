@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace CapOverFlow.Client.Services.Interfaces
 {
-    interface IIncludeService
+    interface IIncludeService : IBaseService<IncludeDto>
     {
-        event Action OnChange;
-        List<IncludeDto> Includes { get; set; }
-        Task<List<IncludeDto>> GetIncludes();
-        Task<List<IncludeDto>> CreateInclude(IncludeDto include);
-
 
     }
 }
