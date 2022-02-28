@@ -24,6 +24,7 @@ namespace CapOverFlow.Server.Controllers
             return await _context.Tag
                 .Include(ct => ct.Categories)
                 .Include(ic => ic.Includes)
+                .ThenInclude(pb => pb.Publication)
                 .ToListAsync();
         }
 
@@ -36,13 +37,19 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTag(int id)
         {
+            var tag = await GetTagById(id);
+            if (tag == null)
+                return NotFound("Tag wasn't found.");
+            return Ok(tag);
+        }
+
+        private async Task<TagDto> GetTagById(int id)
+        {
             var tag = await _context.Tag
                 .Include(ct => ct.Categories)
                 .Include(ic => ic.Includes)
                 .FirstOrDefaultAsync(h => h.TAG_id == id);
-            if (tag == null)
-                return NotFound("Super Hero wasn't found.");
-            return Ok(tag);
+            return tag;
         }
 
         [HttpPost]
@@ -51,21 +58,17 @@ namespace CapOverFlow.Server.Controllers
             _context.Tag.Add(tag);
             await _context.SaveChangesAsync();
 
-            return Ok(await GetDbTags());
+            return Ok(await GetTagById(tag.TAG_id));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTag(TagDto tag)
+        public async Task<IActionResult> UpdateTag(TagDto tag, int id)
         {
             var dbTag = await _context.Tag
-                .Include(ct => ct.Categories)
-                .FirstOrDefaultAsync(h => h.TAG_id == tag.TAG_id);
-            if (dbTag == null)
-                return NotFound("Super Hero wasn't found.");
-
+                .FirstOrDefaultAsync(h => h.TAG_id == id);
+          
             dbTag.TAG_name = tag.TAG_name;
             dbTag.CTG_id = tag.CTG_id;
-
             await _context.SaveChangesAsync();
 
             return Ok(await GetDbTags());
@@ -75,10 +78,7 @@ namespace CapOverFlow.Server.Controllers
         public async Task<IActionResult> DeleteTag(int id)
         {
             var dbTag = await _context.Tag
-                .Include(ct => ct.Categories)
                 .FirstOrDefaultAsync(h => h.TAG_id == id);
-            if (dbTag == null)
-                return NotFound("Super Hero wasn't found.");
 
             _context.Tag.Remove(dbTag);
             await _context.SaveChangesAsync();

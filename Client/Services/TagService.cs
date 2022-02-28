@@ -9,57 +9,33 @@ using System.Threading.Tasks;
 
 namespace CapOverFlow.Client.Services
 {
-    public class TagService : ITagService
+    public class TagService : BaseService<TagDto>, ITagService
     {
-        private readonly HttpClient _httpClient;
-        public TagService(HttpClient httpClient)
+        public TagService(HttpClient httpClient) : base(httpClient, "tag")
         {
-            _httpClient = httpClient;
-        }
-        public List<TagDto> Tags { get; set; } = new List<TagDto>();
-
-        public event Action OnChange;
-
-        public async Task<List<TagDto>> GetTags()
-        {
-            Tags = await _httpClient.GetFromJsonAsync<List<TagDto>>($"api/tag"); ;
-            return Tags;
         }
 
-        public async Task<TagDto> GetTag(int id)
-        {
-            return await _httpClient.GetFromJsonAsync<TagDto>($"api/tag/{id}");
-        }
-
-        public async Task<List<TagDto>> CreateTag(TagDto tag)
-        {
-            var result = await _httpClient.PostAsJsonAsync<TagDto>($"api/tag", tag);
-            Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
-            OnChange.Invoke();
-            return Tags;
-        }
-
-        public async Task<List<TagDto>> UpdateTag(TagDto tag)
-        {
-            Console.Write(tag);
-            var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/tag/{tag.TAG_id}", tag);
-            Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
-            OnChange.Invoke();
-            return Tags;
-        }
-
-        public async Task<List<TagDto>> DeleteTag(int id)
-        {
-            var result = await _httpClient.DeleteAsync($"api/Tag/{id}");
-            Tags = await result.Content.ReadFromJsonAsync<List<TagDto>>();
-            OnChange.Invoke();
-            return Tags;
-        }
 
         
 
-       
 
-        
+        //public async Task<TagDto> UpdateTag(TagDto tag)
+        //{
+        //    Console.Write(tag);
+        //    var result = await _httpClient.PutAsJsonAsync<TagDto>($"api/tag/{tag.TAG_id}", tag);
+        //    var temp = await result.Content.ReadFromJsonAsync<TagDto>();
+        //    Tags.Add(temp); 
+        //    OnChange.Invoke();
+        //    return temp;
+        //}
+
+        //public async Task<TagDto> DeleteTag(int id)
+        //{
+        //    var result = await _httpClient.DeleteAsync($"api/Tag/{id}");
+        //    var temp = await result.Content.ReadFromJsonAsync<List<TagDto>>();
+        //    Tags.Remove(temp.Last());
+        //    OnChange.Invoke();
+        //    return temp.Last();
+        //}        
     }
 }

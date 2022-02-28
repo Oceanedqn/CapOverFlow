@@ -60,7 +60,7 @@
 
         if (Tag.TAG_id != 0)
         {
-            await TagService.GetTag(Tag.TAG_id);
+            await TagService.GetEntity(Tag.TAG_id);
         }
     }
 
@@ -74,12 +74,12 @@
     {
         if (Tag.TAG_id == 0)
         {
-            await TagService.CreateTag(Tag);
+            await TagService.CreateEntity(Tag);
             Tag = new TagDto();
         }
         else
         {
-            await TagService.UpdateTag(Tag);
+            await TagService.UpdateEntity(Tag, Tag.TAG_id);
 
         }
 

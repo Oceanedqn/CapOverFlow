@@ -6,22 +6,22 @@ using CapOverFlow.Shared.Dto;
 
 namespace CapOverFlow.Client.Services.Interfaces
 {
-    public interface ITagService
+    public interface ITagService : IBaseService<TagDto>
     {
-        event Action OnChange;
+        //event Action OnChange;
 
-        List<TagDto> Tags { get; set; }
+        //List<TagDto> Tags { get; set; }
         //List<CategoryDto> Categories { get; set; }
 
-        Task<List<TagDto>> GetTags();
+        //Task<List<TagDto>> GetTags();
 
-        Task<TagDto> GetTag(int id);
+        //Task<TagDto> GetTag(int id);
 
-        Task<List<TagDto>> CreateTag(TagDto tag);
+        //Task<TagDto> CreateTag(TagDto tag);
 
-        Task<List<TagDto>> UpdateTag(TagDto tag);
+        //Task<TagDto> UpdateTag(TagDto tag);
 
-        Task<List<TagDto>> DeleteTag(int id);
+        //Task<TagDto> DeleteTag(int id);
 
     }
 }

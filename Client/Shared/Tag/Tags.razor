@@ -11,9 +11,9 @@
             </div>
 
 
-            @if (TagService.Tags.Count == 0)
+            @if (TagService.Entities.Count == 0)
             {
-                <span> Loading tags ...</span>
+                <span> Tag list is empty</span>
             }
             else
             {
@@ -40,14 +40,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var tag in TagService.Tags)
+                                        @foreach (var tag in TagService.Entities)
                                         {
                                             <tr>
                                                 <td>@tag.TAG_id</td>
                                                 <td>@tag.TAG_name</td>
                                                 <td>@tag.Categories.CTG_name</td>
                                                 <td><button class="btn btn-primary" @onclick="(() => Update(tag.TAG_id))">Edit</button></td>
-                                                <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TAG_id))">X</button></td>
+                                                @if(tag.Includes.Count == 0)
+                                                {
+
+                                                    <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TAG_id))">X</button></td>
+                                                }
+                                                else
+                                                {
+                                                    <td></td>
+                                                }
                                             </tr>
                                         }
                                     </tbody>
@@ -80,25 +88,22 @@
 
 @code {
     TagDto currentTag = new TagDto();
-    
-    public List<TagDto> tags = new List<TagDto>();
 
     protected override async Task OnInitializedAsync()
     {
-       await TagService.GetTags();
+        await TagService.GetEntities();
         TagService.OnChange += StateHasChanged;
     }
 
 
     void Update(int id)
     {
-        currentTag = TagService.Tags.Find(h => h.TAG_id == id);
+        currentTag = TagService.Entities.Find(h => h.TAG_id == id);
     }
 
     void Delete(int id)
     {
-        TagService.DeleteTag(id);
-        //TODO: alert when we delete a tag used
+        TagService.DeleteEntity(id);
     }
 
     public void Dispose()
