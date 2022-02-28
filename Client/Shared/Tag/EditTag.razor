@@ -56,7 +56,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Categories =  await CategoryService.GetCategories();
+        Categories =  await CategoryService.GetEntities();
 
         if (Tag.TAG_id != 0)
         {

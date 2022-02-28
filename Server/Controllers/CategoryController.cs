@@ -21,7 +21,9 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<List<CategoryDto>> GetDbCategories()
         {
-            return await _context.Category.ToListAsync();
+            return await _context.Category
+                .Include(ta => ta.Tags)
+                .ToListAsync();
         }
 
         [HttpGet]

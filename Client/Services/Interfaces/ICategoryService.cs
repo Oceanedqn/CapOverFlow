@@ -6,10 +6,8 @@ using CapOverFlow.Shared.Dto;
 
 namespace CapOverFlow.Client.Services.Interfaces
 {
-    interface ICategoryService
+    interface ICategoryService : IBaseService<CategoryDto>
     {
-        Task<List<CategoryDto>> GetCategories();
-
-        Task<CategoryDto> GetCategory(int id);
+       
     }
 }

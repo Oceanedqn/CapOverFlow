@@ -9,25 +9,10 @@ using CapOverFlow.Client.Services.Interfaces;
 
 namespace CapOverFlow.Client.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService : BaseService<CategoryDto>, ICategoryService
     {
-        private readonly HttpClient _httpClient;
-        public CategoryService(HttpClient httpClient)
+        public CategoryService(HttpClient httpClient) : base(httpClient, "category")
         {
-            _httpClient = httpClient;
-        }
-
-        //public List<CategoryDto> Cateogries { get; set; } = new List<CategoryDto>();
-        //public CategoryDto Category { get; set; } = new CategoryDto();
-
-        public async Task<List<CategoryDto>> GetCategories()
-        {
-            return await _httpClient.GetFromJsonAsync<List<CategoryDto>>($"api/category");
-        }
-
-        public async Task<CategoryDto> GetCategory(int id)
-        {
-            return await _httpClient.GetFromJsonAsync<CategoryDto>($"api/category/{id}");
         }
     }
 }
