@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace CapOverFlow.Shared.Dto
 {
-    [Table("tag_TAG")]
     public partial class TagDto
     {
         public TagDto()
         {
+            PublicationPbcs = new HashSet<PublicationDto>();
         }
 
-        public int TAG_id { get; set; }
-        public string TAG_name { get; set; }
-        public int CTG_id { get; set; }
+        public int TagId { get; set; }
+        public string TagName { get; set; }
+        public int CtgId { get; set; }
 
-        public CategoryDto Categories { get; set; }
-
-        public ICollection<PublicationDto> Publications { get; set; }
+        public virtual CategoryDto Ctg { get; set; }
+        public virtual ICollection<PublicationDto> PublicationPbcs { get; set; }
     }
 }

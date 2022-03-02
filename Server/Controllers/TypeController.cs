@@ -22,8 +22,8 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTypes()
         {
-            return Ok(await _context.Type
-                .Include(pb => pb.Publications)
+            return Ok(await _context.TypesDb
+                .Include(pb => pb.PublicationPbcs)
                 .ToListAsync());
         }
 

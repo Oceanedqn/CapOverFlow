@@ -21,18 +21,18 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<List<TagDto>> GetDbTags()
         {
-            return await _context.Tag
-                .Include(ct => ct.Categories)
-                .Include(pb => pb.Publications)
+            return await _context.TagsDb
+                .Include(ct => ct.Ctg)
+                .Include(pb => pb.PublicationPbcs)
                 .ToListAsync();
         }
 
         private async Task<TagDto> GetTagById(int id)
         {
-            var tag = await _context.Tag
-                .Include(ct => ct.Categories)
-                .Include(pb => pb.Publications)
-                .FirstOrDefaultAsync(h => h.TAG_id == id);
+            var tag = await _context.TagsDb
+                .Include(ct => ct.Ctg)
+                .Include(pb => pb.PublicationPbcs)
+                .FirstOrDefaultAsync(h => h.TagId == id);
             return tag;
         }
 
@@ -52,20 +52,20 @@ namespace CapOverFlow.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTag(TagDto tag)
         {
-            _context.Tag.Add(tag);
+            _context.TagsDb.Add(tag);
             await _context.SaveChangesAsync();
 
-            return Ok(await GetTagById(tag.TAG_id));
+            return Ok(await GetTagById(tag.TagId));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTag(TagDto tag, int id)
         {
-            var dbTag = await _context.Tag
-                .FirstOrDefaultAsync(h => h.TAG_id == id);
+            var dbTag = await _context.TagsDb
+                .FirstOrDefaultAsync(h => h.TagId == id);
           
-            dbTag.TAG_name = tag.TAG_name;
-            dbTag.CTG_id = tag.CTG_id;
+            dbTag.TagName = tag.TagName;
+            dbTag.CtgId = tag.CtgId;
 
             await _context.SaveChangesAsync();
             return Ok(await GetDbTags());
@@ -74,10 +74,10 @@ namespace CapOverFlow.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTag(int id)
         {
-            var dbTag = await _context.Tag
-                .FirstOrDefaultAsync(h => h.TAG_id == id);
+            var dbTag = await _context.TagsDb
+                .FirstOrDefaultAsync(h => h.TagId == id);
 
-            _context.Tag.Remove(dbTag);
+            _context.TagsDb.Remove(dbTag);
             await _context.SaveChangesAsync();
             return Ok(await GetDbTags());
         }

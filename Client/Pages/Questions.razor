@@ -11,28 +11,28 @@
                 <h3>Comment puis-je t'aider ?</h3>
                 <EditForm Model="Publication" OnValidSubmit="HandleSubmit">
                     <div class="mb-3">
-                        <InputText @bind-Value="Publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
+                        <InputText @bind-Value="Publication.PbcTitle" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
                     </div>
                     <div class="mb-3">
-                        <InputTextArea @bind-Value="Publication.PBC_description" maxlength="7000" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
+                        <InputTextArea @bind-Value="Publication.PbcDescription" maxlength="7000" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
                     </div>
-                    @if (Publication.TAG_id == 0)
+                    @if (Publication.TagId == 0)
                     {
                         <div class="mb-3 input-group">
-                            <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button type="button" class="btn btn-primary" @onclick="() => AddTagInPubli(CurrentTag.TAG_name)">+</button>
+                            <InputText @bind-Value="CurrentTag.TagName" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button type="button" class="btn btn-primary" @onclick="() => AddTagInPubli(CurrentTag.TagName)">+</button>
                             <datalist id="txtsearch">
                                 @foreach (var tag in Tags)
                                 {
-                                    <option value="@tag.TAG_name"></option>
+                                    <option value="@tag.TagName"></option>
                                 }
                             </datalist>
                         </div>
                     }
-                    @if (Publication.TAG_id != 0)
+                    @if (Publication.TagId != 0)
                     {
                         <div class="mb-3">
-                            <label class="form-rounded p-1" value="@Publication.Tag.TAG_id" style="background-color: @Publication.Tag.Categories.CTG_color;cursor:pointer;" @onclick="() => RemoveTagInPubli(Publication.Tag)">
-                                <span class="badge badge-pill badge-light p-1">@Publication.Tag.TAG_name</span>
+                            <label class="form-rounded p-1" value="@Publication.Tag.TagId" style="background-color: @Publication.Tag.Ctg.CtgColor;cursor:pointer;" @onclick="() => RemoveTagInPubli(Publication.Tag)">
+                                <span class="badge badge-pill badge-light p-1">@Publication.Tag.TagName</span>
                             </label>
                         </div>
                     }
@@ -67,11 +67,11 @@
 
         async void HandleSubmit()
         {
-            if (Publication.PBC_id == 0 && Publication.TAG_id != 0 && Publication.PBC_title != "" && Publication.PBC_description != "")
+            if (Publication.PbcId == 0 && Publication.TagId != 0 && Publication.PbcTitle != "" && Publication.PbcDescription != "")
             {
-                Publication.PBC_resolved = false;
-                Publication.USR_id = 1;
-                Publication.TYP_id = 1;
+                Publication.PbcResolved = false;
+                Publication.UsrId = 1;
+                Publication.TypId = 1;
 
                 await PublicationService.CreateEntity(Publication);
             }
@@ -80,19 +80,19 @@
 
         public void AddTagInPubli(string name)
         {
-            if (CurrentTag.TAG_name != "")
+            if (CurrentTag.TagName != "")
             {
-                var temp = Tags.FirstOrDefault(h => h.TAG_name == name);
-                Publication.TAG_id = temp.TAG_id;
+                var temp = Tags.FirstOrDefault(h => h.TagName == name);
+                Publication.TagId = temp.TagId;
                 Publication.Tag = temp;
             }
         }
 
         public void RemoveTagInPubli(TagDto tag)
         {
-            Publication.TAG_id = 0;
+            Publication.TagId = 0;
             Publication.Tag = new TagDto();
-            CurrentTag.TAG_name = "";
+            CurrentTag.TagName = "";
 
         }
 

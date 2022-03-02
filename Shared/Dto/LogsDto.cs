@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace CapOverFlow.Shared.Dto
 {
-    public partial class LogDto
+    public partial class LogsDto
     {
         public int LogId { get; set; }
         public string LogTitle { get; set; }

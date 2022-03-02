@@ -1,21 +1,18 @@
-﻿using CapOverFlow.Shared.Dto;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace CapOverFlow.Shared.Dto
 {
-    [Table("attachement_ATC")]
     public partial class AttachementDto
     {
-        public int ATC_id { get; set; }
-        public string ATC_name { get; set; }
-        public string ATC_content { get; set; }
-        public DateTime ATC_date { get; set; }
-        public int PBC_id { get; set; }
+        public int AtcId { get; set; }
+        public string AtcName { get; set; }
+        public string AtcContent { get; set; }
+        public int AtcDate { get; set; }
+        public int PbcId { get; set; }
 
-        public PublicationDto Publication { get; set; }
+        public virtual PublicationDto Pbc { get; set; }
     }
 }

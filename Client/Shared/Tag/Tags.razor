@@ -43,14 +43,14 @@
                                         @foreach (var tag in TagService.Entities)
                                         {
                                             <tr>
-                                                <td>@tag.TAG_id</td>
-                                                <td>@tag.TAG_name</td>
-                                                <td>@tag.Categories.CTG_name</td>
-                                                <td><button class="btn btn-primary" @onclick="(() => Update(tag.TAG_id))">Edit</button></td>
-                                                @if(tag.Publications.Count == 0)
+                                                <td>@tag.TagId</td>
+                                                <td>@tag.TagName</td>
+                                                <td>@tag.Ctg.CtgName</td>
+                                                <td><button class="btn btn-primary" @onclick="(() => Update(tag.TagId))">Edit</button></td>
+                                                @if(tag.PublicationPbcs.Count == 0)
                                                 {
 
-                                                    <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TAG_id))">X</button></td>
+                                                    <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TagId))">X</button></td>
                                                 }
                                                 else
                                                 {
@@ -98,7 +98,7 @@
 
     void Update(int id)
     {
-        currentTag = TagService.Entities.Find(h => h.TAG_id == id);
+        currentTag = TagService.Entities.Find(h => h.TagId == id);
     }
 
     void Delete(int id)
