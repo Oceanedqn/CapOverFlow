@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CapOverFlow.Shared.Dto
 {
-    [Table("T_Type_TYP")]
+    [Table("type_TYP")]
     public partial class TypeDto
     {
         public TypeDto()

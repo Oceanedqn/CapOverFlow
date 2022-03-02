@@ -47,7 +47,7 @@
                                                 <td>@tag.TAG_name</td>
                                                 <td>@tag.Categories.CTG_name</td>
                                                 <td><button class="btn btn-primary" @onclick="(() => Update(tag.TAG_id))">Edit</button></td>
-                                                @if(tag.Includes.Count == 0)
+                                                @if(tag.Publications.Count == 0)
                                                 {
 
                                                     <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TAG_id))">X</button></td>

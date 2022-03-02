@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CapOverFlow.Shared.Dto
 {
-    [Table("T_Attachement_ATC")]
+    [Table("attachement_ATC")]
     public partial class AttachementDto
     {
         public int ATC_id { get; set; }

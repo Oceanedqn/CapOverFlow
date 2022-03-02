@@ -6,12 +6,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CapOverFlow.Shared.Dto
 {
-    [Table("T_Tags_TAG")]
+    [Table("tag_TAG")]
     public partial class TagDto
     {
         public TagDto()
         {
-            Includes = new HashSet<IncludeDto>();
         }
 
         public int TAG_id { get; set; }
@@ -19,6 +18,7 @@ namespace CapOverFlow.Shared.Dto
         public int CTG_id { get; set; }
 
         public CategoryDto Categories { get; set; }
-        public ICollection<IncludeDto> Includes { get; set; }
+
+        public ICollection<PublicationDto> Publications { get; set; }
     }
 }

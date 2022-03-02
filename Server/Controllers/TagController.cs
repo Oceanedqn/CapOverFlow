@@ -23,8 +23,7 @@ namespace CapOverFlow.Server.Controllers
         {
             return await _context.Tag
                 .Include(ct => ct.Categories)
-                .Include(ic => ic.Includes)
-                .ThenInclude(pb => pb.Publication)
+                .Include(pb => pb.Publications)
                 .ToListAsync();
         }
 
@@ -32,7 +31,7 @@ namespace CapOverFlow.Server.Controllers
         {
             var tag = await _context.Tag
                 .Include(ct => ct.Categories)
-                .Include(ic => ic.Includes)
+                .Include(pb => pb.Publications)
                 .FirstOrDefaultAsync(h => h.TAG_id == id);
             return tag;
         }

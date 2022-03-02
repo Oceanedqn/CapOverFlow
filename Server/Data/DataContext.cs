@@ -19,7 +19,6 @@ namespace CapOverFlow.Server.Data
 
         public virtual DbSet<AttachementDto> Attachement { get; set; }
         public virtual DbSet<CategoryDto> Category { get; set; }
-        public virtual DbSet<IncludeDto> Include { get; set; }
         public virtual DbSet<LogDto> Log { get; set; }
         public virtual DbSet<PublicationDto> Publication { get; set; }
         public virtual DbSet<TagDto> Tag { get; set; }
@@ -41,9 +40,9 @@ namespace CapOverFlow.Server.Data
             modelBuilder.Entity<AttachementDto>(entity =>
             {
                 entity.HasKey(e => e.ATC_id)
-                    .HasName("T_Attachement_ATC_PK");
+                    .HasName("attachement_ATC_PK");
 
-                entity.ToTable("T_Attachement_ATC");
+                entity.ToTable("attachement_ATC");
 
                 entity.Property(e => e.ATC_id).HasColumnName("ATC_id");
 
@@ -69,15 +68,15 @@ namespace CapOverFlow.Server.Data
                     .WithMany(p => p.Attachements)
                     .HasForeignKey(d => d.PBC_id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("T_Attachement_ATC_T_Publication_PBC_FK");
+                    .HasConstraintName("attachement_ATC_publication_PBC_FK");
             });
 
             modelBuilder.Entity<CategoryDto>(entity =>
             {
                 entity.HasKey(e => e.CTG_id)
-                    .HasName("T_CATEGORIES_CTG_PK");
+                    .HasName("category_CTG_PK");
 
-                entity.ToTable("T_Categories_CTG");
+                entity.ToTable("category_CTG");
 
                 entity.Property(e => e.CTG_id).HasColumnName("CTG_id");
 
@@ -92,30 +91,6 @@ namespace CapOverFlow.Server.Data
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("CTG_name");
-            });
-
-            modelBuilder.Entity<IncludeDto>(entity =>
-            {
-                entity.HasKey(e => new { e.TAG_id, e.PBC_id })
-                    .HasName("INCLUDE_PK");
-
-                entity.ToTable("T_Include_ICD");
-
-                entity.Property(e => e.TAG_id).HasColumnName("TAG_id");
-
-                entity.Property(e => e.PBC_id).HasColumnName("PBC_id");
-
-                entity.HasOne(d => d.Publication)
-                    .WithMany(p => p.Includes)
-                    .HasForeignKey(d => d.PBC_id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("T_Include_ICD_T_Publication_PBC0_FK");
-
-                entity.HasOne(d => d.Tag)
-                    .WithMany(p => p.Includes)
-                    .HasForeignKey(d => d.TAG_id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("T_Include_ICD_T_Tags_TAG_FK");
             });
 
             modelBuilder.Entity<LogDto>(entity =>
@@ -144,9 +119,9 @@ namespace CapOverFlow.Server.Data
             modelBuilder.Entity<PublicationDto>(entity =>
             {
                 entity.HasKey(e => e.PBC_id)
-                    .HasName("T_Publication_PBC_PK");
+                    .HasName("publication_PBC_PK");
 
-                entity.ToTable("T_Publication_PBC");
+                entity.ToTable("publication_PBC");
 
                 entity.Property(e => e.PBC_id).HasColumnName("PBC_id");
 
@@ -164,33 +139,41 @@ namespace CapOverFlow.Server.Data
                     .IsUnicode(false)
                     .HasColumnName("PBC_title");
 
-                entity.Property(e => e.QST_date)
+                entity.Property(e => e.PBC_date)
                     .HasColumnType("datetime")
-                    .HasColumnName("QST_date");
+                    .HasColumnName("PBC_date");
 
                 entity.Property(e => e.TYP_id).HasColumnName("TYP_id");
 
                 entity.Property(e => e.USR_id).HasColumnName("USR_id");
 
+                entity.Property(e => e.TAG_id).HasColumnName("TAG_id");
+
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.Publications)
                     .HasForeignKey(d => d.TYP_id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("T_Publication_PBC_T_Type_TYP_FK");
+                    .HasConstraintName("publication_PBC_type_TYP_FK");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Publications)
                     .HasForeignKey(d => d.USR_id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("T_Publication_PBC_T_User_USR_FK");
+                    .HasConstraintName("publication_PBC_user_USR_FK");
+
+                entity.HasOne(d => d.Tag)
+                    .WithMany(p => p.Publications)
+                    .HasForeignKey(d => d.TAG_id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("publication_PBC_tag_TAG_FK");
             });
 
             modelBuilder.Entity<TagDto>(entity =>
             {
                 entity.HasKey(e => e.TAG_id)
-                    .HasName("T_Tags_TAG_PK");
+                    .HasName("tag_TAG_PK");
 
-                entity.ToTable("T_Tags_TAG");
+                entity.ToTable("tag_TAG");
 
                 entity.Property(e => e.TAG_id).HasColumnName("TAG_id");
 
@@ -206,15 +189,15 @@ namespace CapOverFlow.Server.Data
                     .WithMany(p => p.Tags)
                     .HasForeignKey(d => d.CTG_id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("T_Tags_TAG_T_CATEGORIES_CTG_FK");
+                    .HasConstraintName("tag_TAG_category_CTG_FK");
             });
 
             modelBuilder.Entity<TypeDto>(entity =>
             {
                 entity.HasKey(e => e.TYP_id)
-                    .HasName("T_Type_TYP_PK");
+                    .HasName("type_TYP_PK");
 
-                entity.ToTable("T_Type_TYP");
+                entity.ToTable("type_TYP");
 
                 entity.Property(e => e.TYP_id).HasColumnName("TYP_id");
 
@@ -228,9 +211,9 @@ namespace CapOverFlow.Server.Data
             modelBuilder.Entity<UserDto>(entity =>
             {
                 entity.HasKey(e => e.USR_id)
-                    .HasName("T_User_USR_PK");
+                    .HasName("user_USR_PK");
 
-                entity.ToTable("T_User_USR");
+                entity.ToTable("user_USR");
 
                 entity.Property(e => e.USR_id).HasColumnName("USR_id");
 

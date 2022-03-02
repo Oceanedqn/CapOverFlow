@@ -24,18 +24,18 @@ namespace CapOverFlow.Server.Controllers
             return await _context.Publication
                 .Include(us => us.User)
                 .Include(ty => ty.Type)
-                .Include(ic => ic.Includes)
-                .ThenInclude(ic => ic.Tag)
+                .Include(tag => tag.Tag)
+                .ThenInclude(ct => ct.Categories)
                 .ToListAsync();
         }
 
         private async Task<PublicationDto> GetPublicationById(int id)
         {
             var question = await _context.Publication
-                .Include(us => us.User)
+               .Include(us => us.User)
                 .Include(ty => ty.Type)
-                .Include(ic => ic.Includes)
-                .ThenInclude(ic => ic.Tag)
+                .Include(tag => tag.Tag)
+                .ThenInclude(ct => ct.Categories)
                 .FirstOrDefaultAsync(h => h.PBC_id == id);
             return question;
         }
@@ -60,11 +60,7 @@ namespace CapOverFlow.Server.Controllers
         public async Task<IActionResult> CreateQuestion(PublicationDto publication)
         {
 
-            publication.PBC_resolved = false;
-            publication.QST_date = DateTime.Now;
-            publication.USR_id = 1;
-            publication.TYP_id = 1;
-
+            publication.PBC_date = DateTime.UtcNow;
             _context.Publication.Add(publication);
             await _context.SaveChangesAsync();
 
@@ -80,7 +76,7 @@ namespace CapOverFlow.Server.Controllers
             dbPubli.PBC_title = publication.PBC_title;
             dbPubli.PBC_description = publication.PBC_description;
             dbPubli.PBC_resolved = publication.PBC_resolved;
-            dbPubli.QST_date = DateTime.Now;
+            dbPubli.PBC_date = DateTime.Now;
             dbPubli.TYP_id = 1;
             dbPubli.USR_id = 1;
 

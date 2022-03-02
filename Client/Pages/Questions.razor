@@ -1,116 +1,103 @@
 ﻿@page "/questions"
 @inject IPublicationService PublicationService
 @inject ITagService TagService
-@inject IIncludeService IncludeService
 @inject NavigationManager NavigationManager
 @implements IDisposable
+@using Newtonsoft.Json 
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm">
-            <h3>Comment puis-je t'aider ?</h3>
-            <EditForm Model="Publication" OnValidSubmit="HandleSubmit">
-                <div class="mb-3">
-                    <InputText @bind-Value="Publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
-                </div>
-                <div class="mb-3">
-                    <InputTextArea @bind-Value="Publication.PBC_description" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
-                </div>
-                @*Tag input*@
-                <div class="mb-3 input-group">
-                    <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button type="button" class="btn btn-primary" @onclick="() => AddTagInListTagPubli(CurrentTag.TAG_name)">+</button>
-                    <datalist id="txtsearch">
-                        @foreach (var tag in TagsList)
-                        {
-                            <option value="@tag.TAG_name"></option>
-                        }
-                    </datalist>
-                </div>
-                @*Tag vignette*@
-                <div class="mb-3">
-                    @foreach (TagDto tag in ChooseTag)
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm">
+                <h3>Comment puis-je t'aider ?</h3>
+                <EditForm Model="Publication" OnValidSubmit="HandleSubmit">
+                    <div class="mb-3">
+                        <InputText @bind-Value="Publication.PBC_title" class="form-control shadow-sm form-rounded" placeholder="Sujet"></InputText>
+                    </div>
+                    <div class="mb-3">
+                        <InputTextArea @bind-Value="Publication.PBC_description" maxlength="7000" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description"></InputTextArea>
+                    </div>
+                    @if (Publication.TAG_id == 0)
                     {
-                        <label class="form-rounded pl-2 mr-2" value="@tag.TAG_id" style="background-color:@tag.Categories.CTG_color;">
-                            @tag.TAG_name <button type="button" class="btn btn-primary form-rounded" @onclick="() => RemoveTagInListTagPubli(tag)">X</button>
-                        </label>
+                        <div class="mb-3 input-group">
+                            <InputText @bind-Value="CurrentTag.TAG_name" class="form-control form-rounded" placeholder="Tag" list="txtsearch"></InputText><button type="button" class="btn btn-primary" @onclick="() => AddTagInPubli(CurrentTag.TAG_name)">+</button>
+                            <datalist id="txtsearch">
+                                @foreach (var tag in Tags)
+                                {
+                                    <option value="@tag.TAG_name"></option>
+                                }
+                            </datalist>
+                        </div>
                     }
-                </div>
-                @*Bouton Poser la question*@
-                <button type="submit" class="btn btn-secondary form-rounded">Poser la question</button>
-            </EditForm>
-        </div>
-        <div class="col-sm" style="height: 90vh; overflow-y: scroll;">
-            <Feed></Feed>
+                    @if (Publication.TAG_id != 0)
+                    {
+                        <div class="mb-3">
+                            <label class="form-rounded p-1" value="@Publication.Tag.TAG_id" style="background-color: @Publication.Tag.Categories.CTG_color;cursor:pointer;" @onclick="() => RemoveTagInPubli(Publication.Tag)">
+                                <span class="badge badge-pill badge-light p-1">@Publication.Tag.TAG_name</span>
+                            </label>
+                        </div>
+                    }
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-secondary form-rounded">Poser la question</button>
+                    </div>
+                </EditForm>
+            </div>
+            <div class="col-sm">
+                <Feed></Feed>
+            </div>
         </div>
     </div>
-</div>
 
 
 
 
 
-@code {
-    PublicationDto Publication = new PublicationDto();
-    List<PublicationDto> PubliList = new List<PublicationDto>();
-    List<IncludeDto> Includes = new List<IncludeDto>();
-    List<TagDto> TagsList = new List<TagDto>();
-    List<TagDto> ChooseTag = new List<TagDto>();
-    TagDto CurrentTag = new TagDto();
+    @code {
+        List<PublicationDto> Publications = new List<PublicationDto>();
+        PublicationDto Publication = new PublicationDto();
+        List<TagDto> Tags = new List<TagDto>();
+        TagDto CurrentTag = new TagDto();
 
-    protected override async Task OnInitializedAsync()
-    {
-        TagsList = await TagService.GetEntities();
-        PubliList = await PublicationService.GetEntities();
-        IncludeService.OnChange += StateHasChanged;
-    }
-
-
-
-    async void HandleSubmit()
-    {
-        if (Publication.PBC_id == 0)
+        protected override async Task OnInitializedAsync()
         {
-            var test = await PublicationService.CreateEntity(Publication);
+            Tags = await TagService.GetEntities();
+            Publications = await PublicationService.GetEntities();
+        }
 
 
-            if (ChooseTag.Count != 0)
+
+        async void HandleSubmit()
+        {
+            if (Publication.PBC_id == 0 && Publication.TAG_id != 0 && Publication.PBC_title != "" && Publication.PBC_description != "")
             {
-                foreach (var tag in ChooseTag)
-                {
-                    await IncludeService.CreateEntity(new IncludeDto
-                    {
-                        PBC_id = test.PBC_id,
-                        TAG_id = tag.TAG_id
-                    }); ;
-                }
+                Publication.PBC_resolved = false;
+                Publication.USR_id = 1;
+                Publication.TYP_id = 1;
+
+                await PublicationService.CreateEntity(Publication);
             }
-            await PublicationService.UpdateEntity(test, test.PBC_id);
             Publication = new PublicationDto();
-
         }
-    }
 
-    public void AddTagInListTagPubli(string name)
-    {
-        if (CurrentTag.TAG_name != "")
+        public void AddTagInPubli(string name)
         {
-            var temp = TagsList.FirstOrDefault(h => h.TAG_name == name);
-
-            if (!ChooseTag.Contains(temp))
+            if (CurrentTag.TAG_name != "")
             {
-                ChooseTag.Add(temp);
+                var temp = Tags.FirstOrDefault(h => h.TAG_name == name);
+                Publication.TAG_id = temp.TAG_id;
+                Publication.Tag = temp;
             }
-            CurrentTag = new TagDto();
+        }
+
+        public void RemoveTagInPubli(TagDto tag)
+        {
+            Publication.TAG_id = 0;
+            Publication.Tag = new TagDto();
+            CurrentTag.TAG_name = "";
+
+        }
+
+        public void Dispose()
+        {
+            PublicationService.OnChange -= StateHasChanged;
         }
     }
-
-    public void RemoveTagInListTagPubli(TagDto tag)
-    {
-        ChooseTag.Remove(TagsList.FirstOrDefault(h => h.TAG_id == tag.TAG_id));
-    }
-
-    public void Dispose()
-    {
-        IncludeService.OnChange -= StateHasChanged;
-    }
-}
