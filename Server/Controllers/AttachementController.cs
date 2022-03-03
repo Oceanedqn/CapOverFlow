@@ -23,9 +23,7 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAttachements()
         {
-            return Ok(await _context.AttachementsDb
-                .Include(pb => pb.Pbc)
-                .ToListAsync());
+            return Ok(await _context.AttachementsDb.ToListAsync());
         }
 
 

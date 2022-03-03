@@ -21,23 +21,46 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<List<PublicationDto>> GetDbPublications()
         {
-            return await _context.PublicationsDb
-                .Include(us => us.Usr)
-                .Include(ty => ty.Typ)
-                .Include(tag => tag.Tag)
-                .ThenInclude(ct => ct.Ctg)
-                .ToListAsync();
+            List<PublicationDto> publications = await _context.PublicationsDb.ToListAsync();
+            List<TagDto> tags = await _context.TagsDb.ToListAsync();
+            List<UserDto> users = await _context.UsersDb.ToListAsync();
+            List<TypeDto> types = await _context.TypesDb.ToListAsync();
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+
+            foreach(var tag in tags)
+            {
+                tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
+            }
+
+            foreach (var publication in publications)
+            {
+                publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
+                publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
+                publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
+
+
+            }
+
+            return publications;
         }
 
         private async Task<PublicationDto> GetPublicationById(int id)
         {
-            var question = await _context.PublicationsDb
-               .Include(us => us.Usr)
-                .Include(ty => ty.Typ)
-                .Include(tag => tag.Tag)
-                .ThenInclude(ct => ct.Ctg)
-                .FirstOrDefaultAsync(h => h.PbcId == id);
-            return question;
+            List<TagDto> tags = await _context.TagsDb.ToListAsync();
+            List<UserDto> users = await _context.UsersDb.ToListAsync();
+            List<TypeDto> types = await _context.TypesDb.ToListAsync();
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+
+            foreach (var tag in tags)
+            {
+                tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
+            }
+
+            var publication = await _context.PublicationsDb.FirstOrDefaultAsync(h => h.PbcId == id);
+            publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
+            publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
+            publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
+            return publication;
         }
 
 

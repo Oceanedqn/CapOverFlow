@@ -22,9 +22,7 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
-            return Ok(await _context.UsersDb
-                .Include(pb => pb.PublicationPbcs)
-                .ToListAsync());
+            return Ok(await _context.UsersDb.ToListAsync());
         }
     }
 }

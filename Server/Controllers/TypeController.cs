@@ -22,9 +22,7 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTypes()
         {
-            return Ok(await _context.TypesDb
-                .Include(pb => pb.PublicationPbcs)
-                .ToListAsync());
+            return Ok(await _context.TypesDb.ToListAsync());
         }
 
 

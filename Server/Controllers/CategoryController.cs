@@ -21,9 +21,7 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<List<CategoryDto>> GetDbCategories()
         {
-            return await _context.CategoriesDb
-                .Include(ta => ta.TagTags)
-                .ToListAsync();
+            return await _context.CategoriesDb.ToListAsync();
         }
 
         [HttpGet]
@@ -37,8 +35,6 @@ namespace CapOverFlow.Server.Controllers
         {
             var category = await _context.CategoriesDb
                 .FirstOrDefaultAsync(h => h.CtgId == id);
-            if (category == null)
-                return NotFound("Super Hero wasn't found.");
             return Ok(category);
         }
     }

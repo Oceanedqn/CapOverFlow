@@ -61,11 +61,11 @@ namespace CapOverFlow.Server.Data
 
                 entity.Property(e => e.PbcId).HasColumnName("PBC_id");
 
-                entity.HasOne(d => d.Pbc)
-                    .WithMany(p => p.AttachementAtcs)
-                    .HasForeignKey(d => d.PbcId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("attachement_ATC_publication_PBC_FK");
+                //entity.HasOne(d => d.Pbc)
+                //    .WithMany(p => p.AttachementAtcs)
+                //    .HasForeignKey(d => d.PbcId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("attachement_ATC_publication_PBC_FK");
             });
 
             modelBuilder.Entity<CategoryDto>(entity =>
@@ -152,17 +152,17 @@ namespace CapOverFlow.Server.Data
                 //    .OnDelete(DeleteBehavior.ClientSetNull)
                 //    .HasConstraintName("publication_PBC_tag_TAG_FK");
 
-                entity.HasOne(d => d.Typ)
-                    .WithMany(p => p.PublicationPbcs)
-                    .HasForeignKey(d => d.TypId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("publication_PBC_type_TYP1_FK");
+                //entity.HasOne(d => d.Typ)
+                //    .WithMany(p => p.PublicationPbcs)
+                //    .HasForeignKey(d => d.TypId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("publication_PBC_type_TYP1_FK");
 
-                entity.HasOne(d => d.Usr)
-                    .WithMany(p => p.PublicationPbcs)
-                    .HasForeignKey(d => d.UsrId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("publication_PBC_user_USR0_FK");
+                //entity.HasOne(d => d.Usr)
+                //    .WithMany(p => p.PublicationPbcs)
+                //    .HasForeignKey(d => d.UsrId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("publication_PBC_user_USR0_FK");
             });
 
             modelBuilder.Entity<TagDto>(entity =>
