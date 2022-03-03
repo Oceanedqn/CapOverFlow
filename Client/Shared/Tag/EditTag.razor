@@ -4,32 +4,32 @@
 <div class="continer-fluid mt-5">
     <div class="row">
         <div class="col-12">
-            @if (Tag.TAG_id == 0)
+            @if (Tag.TagId == 0)
             {
                 <h4>Create a new Tag</h4>
             }
             else
             {
-                <h4> Edit : @Tag.TAG_name</h4>
+                <h4> Edit : @Tag.TagName</h4>
             }
         </div>
         <div class="col-12">
             <EditForm Model="Tag" OnSubmit="HandleSubmit">
                 <div class="form-group">
                     <label>Nom</label>
-                    <InputText @bind-Value="Tag.TAG_name" class="form-control"></InputText>
+                    <InputText @bind-Value="Tag.TagName" class="form-control"></InputText>
                 </div>
                 <div class="form-group">
                     <label>Categorie</label>
-                    <InputSelect @bind-Value="Tag.CTG_id" class="form-control">
+                    <InputSelect @bind-Value="Tag.CtgId" class="form-control">
                         <option value="0"></option>
                         @foreach (var category in Categories)
                         {
-                            <option value="@category.CTG_id">@category.CTG_name</option>
+                            <option value="@category.CtgId">@category.CtgName</option>
                         }
                     </InputSelect>
                 </div>
-                @if (Tag.TAG_id != 0)
+                @if (Tag.TagId != 0)
                 {
                     <button type="submit" class="btn btn-primary">Modifier</button>
                     <button type="button" @onclick="BackToCreate" class="btn btn-secondary">Retour</button>
@@ -52,15 +52,16 @@
 @code {
     [Parameter]
     public TagDto Tag { get; set; } = new TagDto();
+    public TagDto newTag { get; set; } = new TagDto();
     public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
 
     protected override async Task OnParametersSetAsync()
     {
         Categories =  await CategoryService.GetEntities();
 
-        if (Tag.TAG_id != 0)
+        if (Tag.TagId != 0)
         {
-            await TagService.GetEntity(Tag.TAG_id);
+            await TagService.GetEntity(Tag.TagId);
         }
     }
 
@@ -72,14 +73,16 @@
 
     async void HandleSubmit()
     {
-        if (Tag.TAG_id == 0)
+        if (Tag.TagId == 0)
         {
-            await TagService.CreateEntity(Tag);
+            newTag = await TagService.CreateEntity(Tag);
             Tag = new TagDto();
+            //newTag.Ctg = Categories.FirstOrDefault(id => id.CtgId == newTag.CtgId);
+            //TagService.Entities.Add(newTag);
         }
         else
         {
-            await TagService.UpdateEntity(Tag, Tag.TAG_id);
+            await TagService.UpdateEntity(Tag, Tag.TagId);
 
         }
 

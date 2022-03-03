@@ -21,23 +21,46 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<List<PublicationDto>> GetDbPublications()
         {
-            return await _context.Publication
-                .Include(us => us.User)
-                .Include(ty => ty.Type)
-                .Include(ic => ic.Includes)
-                .ThenInclude(ic => ic.Tag)
-                .ToListAsync();
+            List<PublicationDto> publications = await _context.PublicationsDb.ToListAsync();
+            List<TagDto> tags = await _context.TagsDb.ToListAsync();
+            List<UserDto> users = await _context.UsersDb.ToListAsync();
+            List<TypeDto> types = await _context.TypesDb.ToListAsync();
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+
+            foreach(var tag in tags)
+            {
+                tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
+            }
+
+            foreach (var publication in publications)
+            {
+                publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
+                publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
+                publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
+
+
+            }
+
+            return publications;
         }
 
         private async Task<PublicationDto> GetPublicationById(int id)
         {
-            var question = await _context.Publication
-                .Include(us => us.User)
-                .Include(ty => ty.Type)
-                .Include(ic => ic.Includes)
-                .ThenInclude(ic => ic.Tag)
-                .FirstOrDefaultAsync(h => h.PBC_id == id);
-            return question;
+            List<TagDto> tags = await _context.TagsDb.ToListAsync();
+            List<UserDto> users = await _context.UsersDb.ToListAsync();
+            List<TypeDto> types = await _context.TypesDb.ToListAsync();
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+
+            foreach (var tag in tags)
+            {
+                tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
+            }
+
+            var publication = await _context.PublicationsDb.FirstOrDefaultAsync(h => h.PbcId == id);
+            publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
+            publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
+            publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
+            return publication;
         }
 
 
@@ -60,29 +83,25 @@ namespace CapOverFlow.Server.Controllers
         public async Task<IActionResult> CreateQuestion(PublicationDto publication)
         {
 
-            publication.PBC_resolved = false;
-            publication.QST_date = DateTime.Now;
-            publication.USR_id = 1;
-            publication.TYP_id = 1;
-
-            _context.Publication.Add(publication);
+            publication.PbcDate = DateTime.UtcNow;
+            _context.PublicationsDb.Add(publication);
             await _context.SaveChangesAsync();
 
-            return Ok(await GetPublicationById(publication.PBC_id));
+            return Ok(await GetPublicationById(publication.PbcId));
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateQuestion(PublicationDto publication)
         {
-            var dbPubli = await _context.Publication
-                .FirstOrDefaultAsync(h => h.PBC_id == publication.PBC_id);
+            var dbPubli = await _context.PublicationsDb
+                .FirstOrDefaultAsync(h => h.PbcId == publication.PbcId);
            
-            dbPubli.PBC_title = publication.PBC_title;
-            dbPubli.PBC_description = publication.PBC_description;
-            dbPubli.PBC_resolved = publication.PBC_resolved;
-            dbPubli.QST_date = DateTime.Now;
-            dbPubli.TYP_id = 1;
-            dbPubli.USR_id = 1;
+            dbPubli.PbcTitle = publication.PbcTitle;
+            dbPubli.PbcDescription = publication.PbcDescription;
+            dbPubli.PbcResolved = publication.PbcResolved;
+            dbPubli.PbcDate = DateTime.Now;
+            dbPubli.TypId = 1;
+            dbPubli.UsrId = 1;
 
             await _context.SaveChangesAsync();
             return Ok(await GetDbPublications());
@@ -91,10 +110,10 @@ namespace CapOverFlow.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
-            var dbHPubli = await _context.Publication
-                .FirstOrDefaultAsync(h => h.PBC_id == id);
+            var dbHPubli = await _context.PublicationsDb
+                .FirstOrDefaultAsync(h => h.PbcId == id);
 
-            _context.Publication.Remove(dbHPubli);
+            _context.PublicationsDb.Remove(dbHPubli);
             await _context.SaveChangesAsync();
             return Ok(await GetDbPublications());
         }

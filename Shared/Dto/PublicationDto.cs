@@ -1,40 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
 namespace CapOverFlow.Shared.Dto
 {
-    [Table("T_Publication_PBC")]
     public partial class PublicationDto
     {
         public PublicationDto()
         {
-            Attachements = new HashSet<AttachementDto>();
-            Includes = new List<IncludeDto>();
         }
 
-        public int PBC_id { get; set; }
-        [Required]
-        [StringLength(100, ErrorMessage = "Name is too long.")]
-        public string PBC_title { get; set; }
-        [Required]
-        [StringLength(1000, ErrorMessage = "Name is too long.")]
-        public string PBC_description { get; set; }
-        [Required]
-        public bool PBC_resolved { get; set; }
-        [Required]
-        public DateTime QST_date { get; set; }
-        [Required]
-        public int USR_id { get; set; }
-        [Required]
-        public int TYP_id { get; set; }
+        public int PbcId { get; set; }
+        public string PbcTitle { get; set; }
+        public string PbcDescription { get; set; }
+        public bool PbcResolved { get; set; }
+        public DateTime PbcDate { get; set; }
+        public int TagId { get; set; }
+        public int UsrId { get; set; }
+        public int TypId { get; set; }
 
-        public TypeDto Type { get; set; }
-        public UserDto User { get; set; }
-        public ICollection<AttachementDto> Attachements { get; set; }
-        public List<IncludeDto> Includes { get; set; }
+        public virtual TagDto Tag { get; set; }
+        public virtual TypeDto Typ { get; set; }
+        public virtual UserDto Usr { get; set; }
     }
 }

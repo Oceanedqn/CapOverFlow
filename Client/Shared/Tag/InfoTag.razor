@@ -10,15 +10,15 @@
             <EditForm Model="Tag">
                 <div class="form-group">
                     <label>Nom</label>
-                    <label class="form-control">@Tag.TAG_name</label>
+                    <label class="form-control">@Tag.TagName</label>
                 </div>
                 <div class="form-group">
                     <label>Categorie</label>
-                      <label class="form-control">@Tag.Categories.CTG_name</label>
+                      <label class="form-control">@Tag.Ctg.CtgName</label>
                 </div>
                 <div class="form-group">
                     <label>Couleur</label>
-                      <label class="form-control" style="background-color:@Tag.Categories.CTG_color; color:white;">@Tag.Categories.CTG_color</label>
+                      <label class="form-control" style="background-color:@Tag.Ctg.CtgColor; color:white;">@Tag.Ctg.CtgColor</label>
                 </div>
 
             </EditForm>
@@ -38,18 +38,18 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Tag.TAG_id != 0)
+        if (Tag.TagId != 0)
         {
-            await TagService.GetEntity(Tag.TAG_id);
+            await TagService.GetEntity(Tag.TagId);
         }
-        if(Tag.Categories == null)
+        if (Tag.Ctg == null)
         {
             Tag = new TagDto()
             {
-                TAG_id = 0,
-                TAG_name = "",
-                CTG_id = 0,
-                Categories = new CategoryDto()
+                TagId = 0,
+                TagName = "",
+                CtgId = 0,
+                Ctg = new CategoryDto()
             };
         }
     }
