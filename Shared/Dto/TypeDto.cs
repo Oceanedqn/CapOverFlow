@@ -9,12 +9,8 @@ namespace CapOverFlow.Shared.Dto
     {
         public TypeDto()
         {
-            PublicationPbcs = new HashSet<PublicationDto>();
         }
-
         public int TypId { get; set; }
         public string TypName { get; set; }
-
-        public virtual ICollection<PublicationDto> PublicationPbcs { get; set; }
     }
 }

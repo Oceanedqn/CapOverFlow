@@ -9,7 +9,6 @@ namespace CapOverFlow.Shared.Dto
     {
         public PublicationDto()
         {
-            AttachementAtcs = new HashSet<AttachementDto>();
         }
 
         public int PbcId { get; set; }
@@ -24,6 +23,5 @@ namespace CapOverFlow.Shared.Dto
         public virtual TagDto Tag { get; set; }
         public virtual TypeDto Typ { get; set; }
         public virtual UserDto Usr { get; set; }
-        public virtual ICollection<AttachementDto> AttachementAtcs { get; set; }
     }
 }

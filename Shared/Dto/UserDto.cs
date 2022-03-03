@@ -9,7 +9,6 @@ namespace CapOverFlow.Shared.Dto
     {
         public UserDto()
         {
-            PublicationPbcs = new HashSet<PublicationDto>();
         }
 
         public int UsrId { get; set; }
@@ -17,7 +16,5 @@ namespace CapOverFlow.Shared.Dto
         public string UsrFirstname { get; set; }
         public string UsrMail { get; set; }
         public int UsrExperience { get; set; }
-
-        public virtual ICollection<PublicationDto> PublicationPbcs { get; set; }
     }
 }
