@@ -35,7 +35,7 @@ namespace CapOverFlow.Client.Services
 
         public async Task<T> GetEntity(int id)
         {
-            return await _httpClient.GetFromJsonAsync<T>($"api/tag/{id}");
+            return await _httpClient.GetFromJsonAsync<T>($"api/{_endPoint}/{id}");
         }
 
         public async Task<T> CreateEntity(T entity)

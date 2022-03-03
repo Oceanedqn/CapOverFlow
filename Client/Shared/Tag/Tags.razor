@@ -23,44 +23,33 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col" style="height: 40vh; overflow-y: scroll;">
-                            @if (TagService == null)
-                            {
-                                <p><em>Loading...</em></p>
-                            }
-                            else
-                            {
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Name </th>
-                                            <th>Category</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var tag in TagService.Entities)
-                                        {
-                                            <tr>
-                                                <td>@tag.TagId</td>
-                                                <td>@tag.TagName</td>
-                                                <td>@tag.Ctg.CtgName</td>
-                                                <td><button class="btn btn-primary" @onclick="(() => Update(tag.TagId))">Edit</button></td>
-                                                @if(tag.PublicationPbcs.Count == 0)
-                                                {
 
-                                                    <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TagId))">X</button></td>
-                                                }
-                                                else
-                                                {
-                                                    <td></td>
-                                                }
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            }
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name </th>
+                                        <th>Category</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var tag in TagService.Entities)
+                                    {
+                                    <tr>
+                                        <td>@tag.TagId</td>
+                                        <td>@tag.TagName</td>
+                                        <td>@tag.Ctg.CtgName</td>
+                                        <td><button class="btn btn-primary" @onclick="(() => Update(tag.TagId))">Edit</button></td>
+                                        
+                                        <td><button class="btn btn-danger" @onclick="(() => Delete(tag.TagId))">X</button></td>
+                                        
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            
                         </div>
                     </div>
                 </div>
@@ -88,11 +77,14 @@
 
 @code {
     TagDto currentTag = new TagDto();
+    List<PublicationDto> PublicationsList = new List<PublicationDto>();
 
     protected override async Task OnInitializedAsync()
     {
         await TagService.GetEntities();
+        await CategoryService.GetEntities();
         TagService.OnChange += StateHasChanged;
+
     }
 
 

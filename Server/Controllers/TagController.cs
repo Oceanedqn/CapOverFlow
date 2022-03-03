@@ -21,24 +21,28 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<List<TagDto>> GetDbTags()
         {
-            return await _context.TagsDb
-                .Include(ct => ct.Ctg)
-                .Include(pb => pb.PublicationPbcs)
-                .ToListAsync();
+            List<TagDto> tags = await _context.TagsDb.ToListAsync();
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+
+            foreach (var tag in tags)
+            {
+                tag.Ctg = categories.FirstOrDefault(h => h.CtgId == tag.CtgId);
+            }
+            return tags;
         }
 
         private async Task<TagDto> GetTagById(int id)
         {
-            var tag = await _context.TagsDb
-                .Include(ct => ct.Ctg)
-                .Include(pb => pb.PublicationPbcs)
-                .FirstOrDefaultAsync(h => h.TagId == id);
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+            var tag = await _context.TagsDb.FirstOrDefaultAsync(h => h.TagId == id);
+            tag.Ctg = categories.FirstOrDefault(h => h.CtgId == tag.CtgId);
             return tag;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
+
             return base.Ok(await GetDbTags());
         }
 

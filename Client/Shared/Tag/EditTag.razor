@@ -52,6 +52,7 @@
 @code {
     [Parameter]
     public TagDto Tag { get; set; } = new TagDto();
+    public TagDto newTag { get; set; } = new TagDto();
     public List<CategoryDto> Categories { get; set; } = new List<CategoryDto>();
 
     protected override async Task OnParametersSetAsync()
@@ -74,8 +75,10 @@
     {
         if (Tag.TagId == 0)
         {
-            await TagService.CreateEntity(Tag);
+            newTag = await TagService.CreateEntity(Tag);
             Tag = new TagDto();
+            //newTag.Ctg = Categories.FirstOrDefault(id => id.CtgId == newTag.CtgId);
+            //TagService.Entities.Add(newTag);
         }
         else
         {

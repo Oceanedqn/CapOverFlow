@@ -146,11 +146,11 @@ namespace CapOverFlow.Server.Data
 
                 entity.Property(e => e.UsrId).HasColumnName("USR_id");
 
-                entity.HasOne(d => d.Tag)
-                    .WithMany(p => p.PublicationPbcs)
-                    .HasForeignKey(d => d.TagId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("publication_PBC_tag_TAG_FK");
+                //entity.HasOne(d => d.Tag)
+                //    .WithMany(p => p.PublicationPbcs)
+                //    .HasForeignKey(d => d.TagId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("publication_PBC_tag_TAG_FK");
 
                 entity.HasOne(d => d.Typ)
                     .WithMany(p => p.PublicationPbcs)
@@ -182,11 +182,11 @@ namespace CapOverFlow.Server.Data
                     .IsUnicode(false)
                     .HasColumnName("TAG_name");
 
-                entity.HasOne(d => d.Ctg)
-                    .WithMany(p => p.TagTags)
-                    .HasForeignKey(d => d.CtgId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("tag_TAG_category_CTG_FK");
+                //entity.HasOne(d => d.Ctg)
+                //    .WithMany(p => p.TagTags)
+                //    .HasForeignKey(d => d.CtgId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("tag_TAG_category_CTG_FK");
             });
 
             modelBuilder.Entity<TypeDto>(entity =>
