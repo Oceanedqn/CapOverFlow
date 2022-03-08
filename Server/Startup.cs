@@ -26,9 +26,8 @@ namespace CapOverFlow.Server
             services.AddControllers();
                 //.AddNewtonsoftJson(
                 //options =>
-                //{
-                //    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                //    //options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                //{   
+                //    options.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
                 //});
             services.AddRazorPages();
         }

@@ -124,6 +124,9 @@ namespace CapOverFlow.Server.Data
 
                 entity.Property(e => e.PbcDate)
                     .HasColumnType("datetime")
+                    //.IsRequired()
+                    //.HasMaxLength(40)
+                    //.IsUnicode(false)
                     .HasColumnName("PBC_date");
 
                 entity.Property(e => e.PbcDescription)

@@ -14,43 +14,52 @@
             }
             else
             {
-                <div class="row">
+        <div class="row">
 
-                    @foreach (var question in PublicationService.Entities)
-                    {
-                        <div class="col-sm-6">
-                            <div class="card form-rounded mb-3">
-                                <div class="card-header form-rounded" style="background-color:@question.Tag.Ctg.CtgColor;">
-
-                                    <h5 class="card-title"><span class="badge badge-secondary">@question.Tag.TagName</span> @question.PbcTitle </h5>
-                                    <h6 class="card-subtitle mb-2 text-white">@question.PbcDate</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-1">
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitches'+@question.PbcId+'">
-                                                @if (question.PbcResolved == true)
-                                                {
-                                                    <input type="checkbox" class="custom-control-input" id="customSwitches'+@question.PbcId+'" checked>
-                                                }
-                                                <label class="custom-control-label" for="customSwitches'+@question.PbcId+'"></label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12" style="max-height: 30vh; overflow-y: scroll;">
-                                            <p class="card-text">@question.PbcDescription</p>
-
-                                        </div>
-                                        <div class="col-12">
-                                            <button class="btn btn-secondary">Card link</button>
-                                        </div>
-                                    </div>
+            @foreach (var question in PublicationService.Entities)
+            {
+                <div class="col-sm-6">
+                    <div class="card form-rounded mb-3" style="height: 40vh;">
+                        <div class="card-header form-rounded" style="background-color:@question.Tag.Ctg.CtgColor;">
+                            <div class="row justify-content-between align-items-center">
+                                <h5><span class="badge badge-secondary">@question.Tag.TagName</span> @question.PbcTitle </h5>
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitches'+@question.PbcId+'">
+                                    @if (question.PbcResolved == true)
+                                    {
+                                        <input type="checkbox" class="custom-control-input" id="customSwitches'+@question.PbcId+'" checked>
+                                    }
+                                    <label class="custom-control-label" for="customSwitches'+@question.PbcId+'"></label>
                                 </div>
                             </div>
                         </div>
-                    }
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-12" style="max-height: 15vh; overflow-y: scroll;">
+                                    <p class="card-text">@question.PbcDescription</p>
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <div class="row justify-content-end align-items-center">
+                                <div class="mr-3">
+                                    @question.PbcDate
+                                </div>
+                                <div>
+                                   
+                                    <button class="btn btn-secondary">Voir plus</button>
+                                   
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            }
+        </div>
 
       }
         </div>
