@@ -7,7 +7,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm">
+        <div class="col-12 col-xl-4">
             <h3>Comment puis-je t'aider ?</h3>
             <EditForm Model="Publication" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
@@ -51,8 +51,8 @@
                 </div>
             </EditForm>
         </div>
-        <div class="col-sm">
-            <Feed/>
+        <div class="col-12 col-xl-8">
+            <Feed whatType="question"/>
         </div>
     </div>
 </div>
@@ -87,7 +87,7 @@
                 PbcDescription = Publication.PbcDescription,
                 PbcResolved = false,
                 TagId = Publication.TagId,
-                TypId = 1,
+                TypId = 3,
                 UsrId = 1,
                 PbcDate = DateTime.Now
             };

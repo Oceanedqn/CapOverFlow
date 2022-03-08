@@ -1,0 +1,51 @@
+﻿<div class="col-12 col-xl-6">
+    <div class="card form-rounded mb-3" style="height: 40vh;">
+        <div class="card-header form-rounded" style="background-color:@Question.Tag.Ctg.CtgColor;">
+            <div class="row justify-content-between align-items-center">
+                <h5 class="pt-2"><span class="badge badge-secondary">@Question.Tag.TagName</span> @Question.PbcTitle </h5>
+                <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="customSwitches'+@Question.PbcId+'" disabled>
+                    @if (Question.PbcResolved == true)
+                    {
+                        <input type="checkbox" class="custom-control-input" id="customSwitches'+@Question.PbcId+'" checked>
+                    }
+                    <label class="custom-control-label" for="customSwitches'+@Question.PbcId+'"></label>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12" style="max-height: 15vh; overflow-y: scroll;">
+                    <p class="card-text">@Question.PbcDescription</p>
+                </div>
+                <div class="col-12 mt-3">
+                    @Question.Usr.UsrLastname @Question.Usr.UsrFirstname
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="row justify-content-end align-items-center">
+                <div class="mr-1">
+                    @Question.PbcDate
+                </div>
+                <div>
+                    @if (Question.PbcResolved == true)
+                    {
+                        <button class="btn btn-secondary">Voir plus</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary">Aider</button>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PublicationDto Question { get; set; } = new PublicationDto();
+}
