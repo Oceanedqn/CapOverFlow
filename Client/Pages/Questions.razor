@@ -87,13 +87,16 @@
                 PbcDescription = Publication.PbcDescription,
                 PbcResolved = false,
                 TagId = Publication.TagId,
-                TypId = 3,
+                TypId = 1,
                 UsrId = 1,
                 PbcDate = DateTime.Now
             };
 
             await PublicationService.CreateEntity(publi);
 
+            Publication.PbcTitle = "";
+            Publication.PbcDescription = "";
+            Publication.TagId = 0;
         }
     }
 

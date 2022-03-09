@@ -1,0 +1,74 @@
+﻿@page "/questions/{id:int}"
+@inject IPublicationService PublicationService
+@inject ICommentService CommentService
+
+@if (question == null)
+{
+    <span>La question est en chargement</span>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-6 mb-3">               
+                    <div class="col-12">
+                        <h3 class="text-center form-rounded py-3" style="background-color:@question.Tag.Ctg.CtgColor; color:@question.Tag.Ctg.CtgTextColor;">@question.PbcTitle</h3>
+                        <h5>@question.Usr.UsrLastname @question.Usr.UsrFirstname</h5>
+                        <p class="text-muted">@question.PbcDate</p>
+                    </div>
+                    <div class="col-12">
+                        @question.PbcDescription
+                    </div>                
+            </div>
+            <div class="col-12 col-lg-6 ">
+               
+                <div class="col-12 container-fluid form-rounded py-3" style="background-color:@question.Tag.Ctg.CtgColor; height:90vh;">
+                        <div>
+
+                        <h5 class="text-center" style="color:@question.Tag.Ctg.CtgTextColor;">Commentaires</h5>
+                        <EditForm Model="@response" OnValidSubmit="@HandleValidSubmit">
+                            <DataAnnotationsValidator />
+                            <div class="form-group">
+                                <InputText @bind-Value="@response.PbcTitle" class="form-control form-rounded" placeholder="Title"></InputText>
+                            </div>
+                            <div class="form-group">
+                                <InputTextArea @bind-Value="@response.PbcDescription" class="form-control form-rounded" placeholder="Description" rows="4"></InputTextArea>
+                                <button class="btn btn-secondary form-rounded" type="submit">Répondre</button>
+                            </div>
+                        </EditForm>
+                        </div>
+                    <div>
+                        
+                        @*<ResponseLayout />*@
+                    </div>
+
+                   
+
+                </div>
+               
+                
+            </div>
+
+        </div>
+    </div>
+
+
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    PublicationDto question = null;
+    PublicationDto response = new PublicationDto();
+    CommentDto comment = new CommentDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        question = await PublicationService.GetEntity(Id);
+        //comment = await CommentService.GetEntity(Id);
+    }
+
+    private void HandleValidSubmit()
+    {
+    }
+}

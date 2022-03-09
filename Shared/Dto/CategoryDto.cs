@@ -14,5 +14,6 @@ namespace CapOverFlow.Shared.Dto
         public int CtgId { get; set; }
         public string CtgName { get; set; }
         public string CtgColor { get; set; }
+        public string CtgTextColor { get; set; }
     }
 }

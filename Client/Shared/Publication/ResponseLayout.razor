@@ -1,0 +1,20 @@
+﻿
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h5>@Response.PbcTitle</h5>
+            <p class="text-muted">@Response.Usr.UsrLastname @Response.Usr.UsrFirstname</p>
+            <p>@Response.PbcDescription</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public PublicationDto Response { get; set; } = new PublicationDto();
+}

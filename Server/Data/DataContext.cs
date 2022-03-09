@@ -24,7 +24,7 @@ namespace CapOverFlow.Server.Data
         public virtual DbSet<TagDto> TagsDb { get; set; }
         public virtual DbSet<TypeDto> TypesDb { get; set; }
         public virtual DbSet<UserDto> UsersDb { get; set; }
-
+        public virtual DbSet<CommentDto> CommentsDb { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured) { 
@@ -61,6 +61,10 @@ namespace CapOverFlow.Server.Data
 
                 entity.Property(e => e.PbcId).HasColumnName("PBC_id");
 
+                entity.Property(e => e.AtcDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("ATC_date");
+
                 //entity.HasOne(d => d.Pbc)
                 //    .WithMany(p => p.AttachementAtcs)
                 //    .HasForeignKey(d => d.PbcId)
@@ -82,6 +86,12 @@ namespace CapOverFlow.Server.Data
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("CTG_color");
+
+                entity.Property(e => e.CtgTextColor)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false)
+                    .HasColumnName("CTG_textColor");
 
                 entity.Property(e => e.CtgName)
                     .IsRequired()
@@ -124,9 +134,6 @@ namespace CapOverFlow.Server.Data
 
                 entity.Property(e => e.PbcDate)
                     .HasColumnType("datetime")
-                    //.IsRequired()
-                    //.HasMaxLength(40)
-                    //.IsUnicode(false)
                     .HasColumnName("PBC_date");
 
                 entity.Property(e => e.PbcDescription)
@@ -166,6 +173,16 @@ namespace CapOverFlow.Server.Data
                 //    .HasForeignKey(d => d.UsrId)
                 //    .OnDelete(DeleteBehavior.ClientSetNull)
                 //    .HasConstraintName("publication_PBC_user_USR0_FK");
+            });
+
+            modelBuilder.Entity<CommentDto>(entity =>
+            {
+                entity.HasKey(e => e.CmtId)
+                    .HasName("comment_CMT_PK");
+                entity.ToTable("comment_CMT");
+                entity.Property(e => e.CmtId).HasColumnName("CMT_id");
+
+                entity.Property(e => e.PbcId).HasColumnName("PBC_id");
             });
 
             modelBuilder.Entity<TagDto>(entity =>
