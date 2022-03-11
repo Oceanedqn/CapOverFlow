@@ -1,55 +1,10 @@
 ﻿@page "/questions"
-@inject IPublicationService PublicationService
-@inject ITagService TagService
-@inject NavigationManager NavigationManager
-@implements IDisposable
-@inject IJSRuntime JsRuntime
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 col-xl-4">
             <h3>Comment puis-je t'aider ?</h3>
-            <EditForm Model="Publication" OnValidSubmit="HandleValidSubmit">
-                <DataAnnotationsValidator />
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <InputText @bind-Value="Publication.PbcTitle" maxlength="100" class="form-control shadow-sm form-rounded" placeholder="Sujet" />
-                        <ValidationMessage For="@(() => Publication.PbcTitle)" />
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-12">
-                        <InputTextArea @bind-Value="Publication.PbcDescription" maxlength="7000" class="form-control shadow-sm form-rounded" rows="5" placeholder="Description" />
-                        <ValidationMessage For="@(() => Publication.PbcDescription)" />
-                    </div>
-                </div>
-                @if (Publication.TagId == 0)
-                {
-                    <div class="form-row">
-                        <div class="form-group input-group col-md-12">
-                            <InputText @bind-Value="CurrentTag.TagName" class="form-control form-rounded" placeholder="Tag" list="txtsearch" /><button type="button" class="btn btn-primary" @onclick="() => AddTagInPubli(CurrentTag.TagName)">+</button>
-                            <ValidationMessage For="@(() => Publication.TagId)" />
-                            <datalist id="txtsearch">
-                                @foreach (var tag in Tags)
-                                {
-                                    <option value="@tag.TagName"></option>
-                                }
-                            </datalist>
-                        </div>
-                    </div>
-                }
-                @if (Publication.TagId != 0)
-                {
-                    <div class="mb-3">
-                        <label class="form-rounded p-1" value="@Publication.Tag.TagId" style="background-color: @Publication.Tag.Ctg.CtgColor;cursor:pointer;" @onclick="() => RemoveTagInPubli(Publication.Tag)">
-                            <span class="badge badge-pill badge-light p-1">@Publication.Tag.TagName</span>
-                        </label>
-                    </div>
-                }
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-secondary form-rounded">Poser la question</button>
-                </div>
-            </EditForm>
+            <PublicationCreate type="1"/>
         </div>
         <div class="col-12 col-xl-8">
             <Feed whatType="question"/>
@@ -60,71 +15,3 @@
 
 
 
-
-@code {
-    List<PublicationDto> Publications = new List<PublicationDto>();
-    private PublicationDto Publication = new PublicationDto();
-    List<TagDto> Tags = new List<TagDto>();
-    TagDto CurrentTag = new TagDto();
-
-    protected override async Task OnInitializedAsync()
-    {
-        Tags = await TagService.GetEntities();
-        Publications = await PublicationService.GetEntities();
-    }
-
-
-
-    private async Task HandleValidSubmit()
-    {
-        if (Publication.PbcId == 0 && Publication.TagId != 0 && Publication.PbcTitle != "" && Publication.PbcDescription != "")
-        {
-
-
-            PublicationDto publi = new PublicationDto
-            {
-                PbcTitle = Publication.PbcTitle,
-                PbcDescription = Publication.PbcDescription,
-                PbcResolved = false,
-                TagId = Publication.TagId,
-                TypId = 1,
-                UsrId = 1,
-                PbcDate = DateTime.Now
-            };
-
-            await PublicationService.CreateEntity(publi);
-
-            Publication.PbcTitle = "";
-            Publication.PbcDescription = "";
-            Publication.TagId = 0;
-        }
-    }
-
-
-
-
-
-
-    public void AddTagInPubli(string name)
-    {
-        if (CurrentTag.TagName != "")
-        {
-            var temp = Tags.FirstOrDefault(h => h.TagName == name);
-            Publication.TagId = temp.TagId;
-            Publication.Tag = temp;
-        }
-    }
-
-    public void RemoveTagInPubli(TagDto tag)
-    {
-        Publication.TagId = 0;
-        Publication.Tag = new TagDto();
-        CurrentTag.TagName = "";
-
-    }
-
-    public void Dispose()
-    {
-        PublicationService.OnChange -= StateHasChanged;
-    }
-}

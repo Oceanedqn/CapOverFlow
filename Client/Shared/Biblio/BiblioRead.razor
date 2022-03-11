@@ -1,0 +1,73 @@
+﻿@page "/bibliocap/{id:int}"
+@inject IPublicationService PublicationService
+@inject ICommentService CommentService
+
+@if (biblio == null)
+{
+    <span>La biblio est en chargement</span>
+}
+else
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-6 mb-3">
+                <div class="col-12">
+                    <h3 class="text-center form-rounded py-3" style="background-color:@biblio.Tag.Ctg.CtgColor; color:@biblio.Tag.Ctg.CtgTextColor;">@biblio.PbcTitle</h3>
+                    <h5>@biblio.Usr.UsrLastname @biblio.Usr.UsrFirstname</h5>
+                    <p class="text-muted">@biblio.PbcDate</p>
+                </div>
+                <div class="col-12">
+                    @biblio.PbcDescription
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 ">
+
+                <div class="col-12 container-fluid form-rounded py-3" style="background-color:@biblio.Tag.Ctg.CtgColor; height:90vh;">
+                    <div>
+
+                        <h5 class="text-center" style="color:@biblio.Tag.Ctg.CtgTextColor;">Commentaires</h5>
+                        <EditForm Model="@response" OnValidSubmit="@HandleValidSubmit">
+                            <DataAnnotationsValidator />
+                            <div class="form-group">
+                                <InputText @bind-Value="@response.PbcTitle" class="form-control form-rounded" placeholder="Title"></InputText>
+                            </div>
+                            <div class="form-group">
+                                <InputTextArea @bind-Value="@response.PbcDescription" class="form-control form-rounded" placeholder="Description" rows="4"></InputTextArea>
+                                <button class="btn btn-secondary form-rounded" type="submit">Répondre</button>
+                            </div>
+                        </EditForm>
+                    </div>
+                    <div>
+
+                        @*<ResponseLayout />*@
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    PublicationDto biblio = null;
+    PublicationDto response = new PublicationDto();
+    CommentDto comment = new CommentDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        biblio = await PublicationService.GetEntity(Id);
+    }
+
+    private void HandleValidSubmit()
+    {
+    }
+}
