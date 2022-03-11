@@ -82,8 +82,6 @@ namespace CapOverFlow.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateQuestion(PublicationDto publication)
         {
-
-            publication.PbcDate = DateTime.UtcNow;
             _context.PublicationsDb.Add(publication);
             await _context.SaveChangesAsync();
 
@@ -99,7 +97,6 @@ namespace CapOverFlow.Server.Controllers
             dbPubli.PbcTitle = publication.PbcTitle;
             dbPubli.PbcDescription = publication.PbcDescription;
             dbPubli.PbcResolved = publication.PbcResolved;
-            dbPubli.PbcDate = DateTime.Now;
             dbPubli.TypId = 1;
             dbPubli.UsrId = 1;
 

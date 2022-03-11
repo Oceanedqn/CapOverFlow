@@ -4,9 +4,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <h1>Feed</h1>
+            <h3>Feed</h3>
         </div>
-        <div class="col-12" style="height: 80vh; overflow-y: scroll;">
+        <div class="col-12" style="height: 85vh; overflow-y: scroll;">
 
             @if (PublicationService.Entities.Count == 0)
             {
@@ -14,45 +14,39 @@
             }
             else
             {
-                <div class="row">
+            <div class="row">
 
-                    @foreach (var question in PublicationService.Entities)
+                @foreach (var question in PublicationService.Entities)
+                {
+
+
+                    @if (whatType == "question" && question.TypId == 1)
                     {
-                        <div class="col-sm-6">
-                            <div class="card form-rounded mb-3">
-                                <div class="card-header form-rounded" style="background-color:@question.Tag.Ctg.CtgColor;">
 
-                                    <h5 class="card-title"><span class="badge badge-secondary">@question.Tag.TagName</span> @question.PbcTitle </h5>
-                                    <h6 class="card-subtitle mb-2 text-white">@question.PbcDate</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-1">
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="customSwitches'+@question.PbcId+'">
-                                                @if (question.PbcResolved == true)
-                                                {
-                                                    <input type="checkbox" class="custom-control-input" id="customSwitches'+@question.PbcId+'" checked>
-                                                }
-                                                <label class="custom-control-label" for="customSwitches'+@question.PbcId+'"></label>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12" style="max-height: 30vh; overflow-y: scroll;">
-                                            <p class="card-text">@question.PbcDescription</p>
-
-                                        </div>
-                                        <div class="col-12">
-                                            <button class="btn btn-secondary">Card link</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <QuestionLayout Question="question" />
                     }
-                </div>
+                    else if (whatType == "biblio" && question.TypId == 3)
+                    {
+                        <BiblioLayout Biblio="question" isOnBiblio="true"/>
+                    }
+                    else if(whatType == "")
+                    {
+                        switch (question.TypId)
+                        {
+                            case 1:
+                                <QuestionLayout Question="question" />
+                                break;
+                            case 3:
+                                <BiblioLayout Biblio="question" />
+                                break;
+                        }
+                    }
 
-      }
+
+                }
+            </div>
+
+        }
         </div>
     </div>
 </div>
@@ -60,6 +54,8 @@
 
 
 @code {
+    [Parameter]
+    public string whatType { get; set; } = "";
     public List<PublicationDto> Publications = new List<PublicationDto>();
 
     protected override async Task OnInitializedAsync()

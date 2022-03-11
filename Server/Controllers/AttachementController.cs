@@ -20,12 +20,53 @@ namespace CapOverFlow.Server.Controllers
             _context = context;
         }
 
+        private async Task<List<AttachementDto>> GetDbAttachements()
+        {
+            List<AttachementDto> attachements = await _context.AttachementsDb.ToListAsync();
+            return attachements;
+        }
+
+        private async Task<AttachementDto> GetAttachementById(int id)
+        {
+            var attachement = await _context.AttachementsDb.FirstOrDefaultAsync(h => h.AtcId == id);
+            return attachement;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAttachements()
         {
-            return Ok(await _context.AttachementsDb.ToListAsync());
+            return base.Ok(await GetAttachements());
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAttachement(int id)
+        {
+            var attachement = await GetAttachementById(id);
+            return Ok(attachement);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAttachement(AttachementDto attachement, int id)
+        {
+            var dbAttachement = await _context.AttachementsDb.FirstOrDefaultAsync(h => h.AtcId == id);
+
+            dbAttachement.AtcName = attachement.AtcName;
+            dbAttachement.AtcContent = attachement.AtcContent;
+            dbAttachement.AtcDate = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return Ok(await GetDbAttachements());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAttachement(int id)
+        {
+            var dbAttachement = await _context.AttachementsDb.FirstOrDefaultAsync(h => h.AtcId == id);
+
+            _context.AttachementsDb.Remove(dbAttachement);
+            await _context.SaveChangesAsync();
+            return Ok(await GetDbAttachements());
+        }
 
     }
 }

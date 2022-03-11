@@ -42,7 +42,6 @@ namespace CapOverFlow.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTags()
         {
-
             return base.Ok(await GetDbTags());
         }
 
