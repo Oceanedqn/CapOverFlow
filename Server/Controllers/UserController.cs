@@ -13,16 +13,16 @@ namespace CapOverFlow.Server.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly DataContext _context;
-        public UserController(DataContext context)
-        {
-            _context = context;
-        }
-
+        List<UserDto> usersList = new List<UserDto>();
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public List<UserDto> GetUsers()
         {
-            return Ok(await _context.UsersDb.ToListAsync());
+            List<UserDto> users = new List<UserDto>
+            {
+                new UserDto{ UsrId=1, UsrLastname = "Duquenne", UsrFirstname="Oceane", UsrMail="ocefrfane.dqn@gmfrfail.com", UsrExperience=0 },
+            };
+            usersList = users;
+            return users;
         }
     }
 }

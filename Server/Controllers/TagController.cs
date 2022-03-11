@@ -13,17 +13,24 @@ namespace CapOverFlow.Server.Controllers
     [ApiController]
     public class TagController : ControllerBase
     {
-        private readonly DataContext _context;
-        public TagController(DataContext context)
-        {
-            _context = context;
-        }
+        private List<TagDto> tags = new List<TagDto>
+            {
+                new TagDto{TagId=1, TagName="C#", CtgId=1 },
+                new TagDto{TagId=2, TagName="SQL", CtgId=2 },
+                new TagDto{TagId=3, TagName="Virus", CtgId=3 },
+                new TagDto{TagId=4, TagName="Arduino", CtgId=4 },
+            };
+        
+        private List<CategoryDto> categories = new List<CategoryDto>
+            {
+                new CategoryDto{ CtgId=1, CtgName = "Dev", CtgColor="#3A7CA5", CtgTextColor="#FFFFFF" },
+                new CategoryDto{ CtgId=2, CtgName = "Data", CtgColor="#D9DCD6", CtgTextColor="#000000" },
+                new CategoryDto{ CtgId=3, CtgName = "Cyber Securite", CtgColor="#81C3D7", CtgTextColor="#000000" },
+                new CategoryDto{ CtgId=4, CtgName = "IOT", CtgColor="#16425B", CtgTextColor="#FFFFFF" },
+            };
 
-        private async Task<List<TagDto>> GetDbTags()
+        private List<TagDto> GetDbTags()
         {
-            List<TagDto> tags = await _context.TagsDb.ToListAsync();
-            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
-
             foreach (var tag in tags)
             {
                 tag.Ctg = categories.FirstOrDefault(h => h.CtgId == tag.CtgId);
@@ -31,58 +38,47 @@ namespace CapOverFlow.Server.Controllers
             return tags;
         }
 
-        private async Task<TagDto> GetTagById(int id)
+        private TagDto GetTagById(int id)
         {
-            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
-            var tag = await _context.TagsDb.FirstOrDefaultAsync(h => h.TagId == id);
+            var tag = tags.FirstOrDefault(h => h.TagId == id);
             tag.Ctg = categories.FirstOrDefault(h => h.CtgId == tag.CtgId);
             return tag;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTags()
+        public List<TagDto> GetTags()
         {
-            return base.Ok(await GetDbTags());
+            return GetDbTags();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTag(int id)
+        public TagDto GetTag(int id)
         {
-            var tag = await GetTagById(id);
-            return Ok(tag);
+            var tag = GetTagById(id);
+            return tag;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTag(TagDto tag)
+        public TagDto CreateTag(TagDto tag)
         {
-            _context.TagsDb.Add(tag);
-            await _context.SaveChangesAsync();
+            tags.Add(tag);
 
-            return Ok(await GetTagById(tag.TagId));
+            return GetTagById(tag.TagId);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTag(TagDto tag, int id)
-        {
-            var dbTag = await _context.TagsDb
-                .FirstOrDefaultAsync(h => h.TagId == id);
-          
-            dbTag.TagName = tag.TagName;
-            dbTag.CtgId = tag.CtgId;
-
-            await _context.SaveChangesAsync();
-            return Ok(await GetDbTags());
+        public List<TagDto> UpdateTag(TagDto tag, int id)
+        {          
+            tags.Where(w => w.TagId == id).ToList().ForEach(s => s.TagName = tag.TagName);
+            tags.Where(w => w.TagId == id).ToList().ForEach(s => s.CtgId = tag.CtgId);
+            return GetDbTags();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTag(int id)
+        public List<TagDto> DeleteTag(int id)
         {
-            var dbTag = await _context.TagsDb
-                .FirstOrDefaultAsync(h => h.TagId == id);
-
-            _context.TagsDb.Remove(dbTag);
-            await _context.SaveChangesAsync();
-            return Ok(await GetDbTags());
+            tags.Remove(tags.FirstOrDefault(h => h.TagId == id));
+            return GetDbTags();
         }
 
     }

@@ -13,20 +13,49 @@ namespace CapOverFlow.Server.Controllers
     [ApiController]
     public class PublicationController : ControllerBase
     {
-        private readonly DataContext _context;
-        public PublicationController(DataContext context)
+        List<TagDto> tags = new List<TagDto>
+            {
+                new TagDto{TagId=1, TagName="C#", CtgId=1 },
+                new TagDto{TagId=2, TagName="SQL", CtgId=2 },
+                new TagDto{TagId=3, TagName="Virus", CtgId=3 },
+                new TagDto{TagId=4, TagName="Arduino", CtgId=4 },
+            };
+
+        List<CategoryDto> categories = new List<CategoryDto>
+            {
+                new CategoryDto{ CtgId=1, CtgName = "Dev", CtgColor="#3A7CA5", CtgTextColor="#FFFFFF" },
+                new CategoryDto{ CtgId=2, CtgName = "Data", CtgColor="#D9DCD6", CtgTextColor="#000000" },
+                new CategoryDto{ CtgId=3, CtgName = "Cyber Securite", CtgColor="#81C3D7", CtgTextColor="#000000" },
+                new CategoryDto{ CtgId=4, CtgName = "IOT", CtgColor="#16425B", CtgTextColor="#FFFFFF" },
+            };
+
+        List<TypeDto> types = new List<TypeDto>
+            {
+                new TypeDto{ TypId=1, TypName="question" },
+                new TypeDto{ TypId=2, TypName="reponse" },
+                new TypeDto{ TypId=3, TypName="biblio" },
+
+            };
+
+        List<UserDto> users = new List<UserDto>
+            {
+                new UserDto{ UsrId=1, UsrLastname = "Duquenne", UsrFirstname="Oceane", UsrMail="ocefrfane.dqn@gmfrfail.com", UsrExperience=0 },
+            };
+
+        List<PublicationDto> publications = new List<PublicationDto>
         {
-            _context = context;
-        }
+            new PublicationDto{PbcId=1, PbcDate=DateTime.Now, PbcResolved=false, TagId=1, TypId=1,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+            new PublicationDto{PbcId=2, PbcDate=DateTime.Now, PbcResolved=false, TagId=2, TypId=1,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+            new PublicationDto{PbcId=3, PbcDate=DateTime.Now, PbcResolved=true, TagId=3, TypId=1,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+            new PublicationDto{PbcId=4, PbcDate=DateTime.Now, PbcResolved=false, TagId=4, TypId=1,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+            new PublicationDto{PbcId=5, PbcDate=DateTime.Now, PbcResolved=false, TagId=1, TypId=3,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+            new PublicationDto{PbcId=6, PbcDate=DateTime.Now, PbcResolved=false, TagId=2, TypId=3,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+            new PublicationDto{PbcId=7, PbcDate=DateTime.Now, PbcResolved=false, TagId=3, TypId=3,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."},
+            new PublicationDto{PbcId=8, PbcDate=DateTime.Now, PbcResolved=false, TagId=4, TypId=3,UsrId=1,PbcTitle="Lorem Ipsum", PbcDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."}
+            };
 
         private async Task<List<PublicationDto>> GetDbPublications()
-        {
-            List<PublicationDto> publications = await _context.PublicationsDb.ToListAsync();
-            List<TagDto> tags = await _context.TagsDb.ToListAsync();
-            List<UserDto> users = await _context.UsersDb.ToListAsync();
-            List<TypeDto> types = await _context.TypesDb.ToListAsync();
-            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
-
+        {          
             foreach(var tag in tags)
             {
                 tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
@@ -46,17 +75,12 @@ namespace CapOverFlow.Server.Controllers
 
         private async Task<PublicationDto> GetPublicationById(int id)
         {
-            List<TagDto> tags = await _context.TagsDb.ToListAsync();
-            List<UserDto> users = await _context.UsersDb.ToListAsync();
-            List<TypeDto> types = await _context.TypesDb.ToListAsync();
-            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
-
             foreach (var tag in tags)
             {
                 tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
             }
 
-            var publication = await _context.PublicationsDb.FirstOrDefaultAsync(h => h.PbcId == id);
+            var publication = publications.FirstOrDefault(h => h.PbcId == id);
             publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
             publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
             publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
@@ -82,36 +106,29 @@ namespace CapOverFlow.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateQuestion(PublicationDto publication)
         {
-            _context.PublicationsDb.Add(publication);
-            await _context.SaveChangesAsync();
+            publications.Add(publication);
 
             return Ok(await GetPublicationById(publication.PbcId));
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateQuestion(PublicationDto publication)
+        public async Task<IActionResult> UpdateQuestion(PublicationDto publication, int id)
         {
-            var dbPubli = await _context.PublicationsDb
-                .FirstOrDefaultAsync(h => h.PbcId == publication.PbcId);
-           
-            dbPubli.PbcTitle = publication.PbcTitle;
-            dbPubli.PbcDescription = publication.PbcDescription;
-            dbPubli.PbcResolved = publication.PbcResolved;
-            dbPubli.TypId = 1;
-            dbPubli.UsrId = 1;
 
-            await _context.SaveChangesAsync();
+            publications.Where(w => w.PbcId == id).ToList().ForEach(s => s.PbcTitle = publication.PbcTitle);
+            publications.Where(w => w.PbcId == id).ToList().ForEach(s => s.PbcResolved = publication.PbcResolved);
+            publications.Where(w => w.PbcId == id).ToList().ForEach(s => s.PbcDescription = publication.PbcDescription);
+
             return Ok(await GetDbPublications());
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
-            var dbHPubli = await _context.PublicationsDb
-                .FirstOrDefaultAsync(h => h.PbcId == id);
+            var dbHPubli = publications
+                .FirstOrDefault(h => h.PbcId == id);
 
-            _context.PublicationsDb.Remove(dbHPubli);
-            await _context.SaveChangesAsync();
+            publications.Remove(dbHPubli);
             return Ok(await GetDbPublications());
         }
 

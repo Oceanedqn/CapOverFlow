@@ -13,16 +13,20 @@ namespace CapOverFlow.Server.Controllers
     [ApiController]
     public class TypeController : ControllerBase
     {
-        private readonly DataContext _context;
-        public TypeController(DataContext context)
-        {
-            _context = context;
-        }
+        List<TypeDto> typList = new List<TypeDto>();
 
         [HttpGet]
-        public async Task<IActionResult> GetTypes()
+        public List<TypeDto> GetTypes()
         {
-            return Ok(await _context.TypesDb.ToListAsync());
+            List<TypeDto> types = new List<TypeDto>
+            {
+                new TypeDto{ TypId=1, TypName="question" },
+                new TypeDto{ TypId=2, TypName="reponse" },
+                new TypeDto{ TypId=3, TypName="biblio" },
+
+            };
+            typList = types;
+            return typList;
         }
 
 

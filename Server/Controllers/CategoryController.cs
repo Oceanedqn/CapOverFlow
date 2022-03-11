@@ -13,29 +13,31 @@ namespace CapOverFlow.Server.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly DataContext _context;
-        public CategoryController(DataContext context)
-        {
-            _context = context;
-        }
 
-        private async Task<List<CategoryDto>> GetDbCategories()
+        List<CategoryDto> categories = new List<CategoryDto>
+            {
+                new CategoryDto{ CtgId=1, CtgName = "Dev", CtgColor="#3A7CA5", CtgTextColor="#FFFFFF" },
+                new CategoryDto{ CtgId=2, CtgName = "Data", CtgColor="#D9DCD6", CtgTextColor="#000000" },
+                new CategoryDto{ CtgId=3, CtgName = "Cyber Securite", CtgColor="#81C3D7", CtgTextColor="#000000" },
+                new CategoryDto{ CtgId=4, CtgName = "IOT", CtgColor="#16425B", CtgTextColor="#FFFFFF" },
+            };
+
+        private List<CategoryDto> GetDbCategories()
         {
-            return await _context.CategoriesDb.ToListAsync();
+            return categories;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCategories()
+        public List<CategoryDto> GetCategories()
         {
-            return Ok(await GetDbCategories());
+            return GetDbCategories();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategory(int id)
+        public CategoryDto GetCategory(int id)
         {
-            var category = await _context.CategoriesDb
-                .FirstOrDefaultAsync(h => h.CtgId == id);
-            return Ok(category);
+            var category = categories.FirstOrDefault(h => h.CtgId == id);
+            return category;
         }
     }
 }

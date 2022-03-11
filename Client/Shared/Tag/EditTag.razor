@@ -74,11 +74,9 @@
     async void HandleSubmit()
     {
         if (Tag.TagId == 0)
-        {
+        {   
             newTag = await TagService.CreateEntity(Tag);
             Tag = new TagDto();
-            //newTag.Ctg = Categories.FirstOrDefault(id => id.CtgId == newTag.CtgId);
-            //TagService.Entities.Add(newTag);
         }
         else
         {
