@@ -1,263 +1,65 @@
-﻿using System;
+﻿using CapOverFlow.Shared.Dto;
 using Microsoft.EntityFrameworkCore;
-using CapOverFlow.Shared.Dto;
-
-#nullable disable
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CapOverFlow.Server.Data
 {
-    public partial class DataContext : DbContext
+    public class DataContext : DbContext
     {
-        public DataContext()
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-        }
 
-        public DataContext(DbContextOptions<DataContext> options)
-            : base(options)
-        {
-        }
-
-        public virtual DbSet<AttachementDto> AttachementsDb { get; set; }
-        public virtual DbSet<CategoryDto> CategoriesDb { get; set; }
-        public virtual DbSet<LogsDto> LogsDb { get; set; }
-        public virtual DbSet<PublicationDto> PublicationsDb { get; set; }
-        public virtual DbSet<TagDto> TagsDb { get; set; }
-        public virtual DbSet<TypeDto> TypesDb { get; set; }
-        public virtual DbSet<UserDto> UsersDb { get; set; }
-        public virtual DbSet<CommentDto> CommentsDb { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured) { 
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CapOverFlow;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
+            modelBuilder.Entity<CategoryDto>().HasData(
+                new CategoryDto { CtgId = 1, CtgName = "Dev", CtgColor = "#3A7CA5", CtgTextColor = "#FFFFFF" },
+                new CategoryDto { CtgId = 2, CtgName = "Data", CtgColor = "#D9DCD6", CtgTextColor = "#000000" },
+                new CategoryDto { CtgId = 3, CtgName = "Cyber Securite", CtgColor = "#81C3D7", CtgTextColor = "#000000" },
+                new CategoryDto { CtgId = 4, CtgName = "IOT", CtgColor = "#16425B", CtgTextColor = "#FFFFFF" }
+            );
 
-            modelBuilder.Entity<AttachementDto>(entity =>
-            {
-                entity.HasKey(e => e.AtcId)
-                    .HasName("attachement_ATC_PK");
+            modelBuilder.Entity<TagDto>().HasData(
+                new TagDto { TagId = 1, TagName = "C#", CtgId = 1 },
+                new TagDto { TagId = 2, TagName = "SQL", CtgId = 2 },
+                new TagDto { TagId = 3, TagName = "Virus", CtgId = 3 },
+                new TagDto { TagId = 4, TagName = "Arduino", CtgId = 4}
+            );
 
-                entity.ToTable("attachement_ATC");
+            modelBuilder.Entity<UserDto>().HasData(
+                new UserDto { UsrId = 1, UsrLastname = "Duquenne", UsrFirstname = "Oceane", UsrMail = "ocefrfane.dqn@gmfrfail.com", UsrExperience = 0 }
+            );
 
-                entity.Property(e => e.AtcId).HasColumnName("ATC_id");
+            modelBuilder.Entity<TypeDto>().HasData(
+                new TypeDto { TypId = 1, TypName = "question" },
+                new TypeDto { TypId = 2, TypName = "reponse" },
+                new TypeDto { TypId = 3, TypName = "biblio" }
+            );
 
-                entity.Property(e => e.AtcContent)
-                    .IsRequired()
-                    .HasMaxLength(1000)
-                    .IsUnicode(false)
-                    .HasColumnName("ATC_content");
+            modelBuilder.Entity<PublicationDto>().HasData(
+                new PublicationDto { PbcId = 1, PbcDate = DateTime.Now, PbcResolved = false, TagId = 1, TypId = 1, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+                new PublicationDto { PbcId = 2, PbcDate = DateTime.Now, PbcResolved = false, TagId = 2, TypId = 1, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+                new PublicationDto { PbcId = 3, PbcDate = DateTime.Now, PbcResolved = true, TagId = 3, TypId = 1, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+                new PublicationDto { PbcId = 4, PbcDate = DateTime.Now, PbcResolved = false, TagId = 4, TypId = 1, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+                new PublicationDto { PbcId = 5, PbcDate = DateTime.Now, PbcResolved = false, TagId = 1, TypId = 3, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+                new PublicationDto { PbcId = 6, PbcDate = DateTime.Now, PbcResolved = false, TagId = 2, TypId = 3, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+                new PublicationDto { PbcId = 7, PbcDate = DateTime.Now, PbcResolved = false, TagId = 3, TypId = 3, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." },
+                new PublicationDto { PbcId = 8, PbcDate = DateTime.Now, PbcResolved = false, TagId = 4, TypId = 3, UsrId = 1, PbcTitle = "Lorem Ipsum", PbcDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum." }
+            );
 
-                entity.Property(e => e.AtcDate).HasColumnName("ATC_date");
-
-                entity.Property(e => e.AtcName)
-                    .IsRequired()
-                    .HasMaxLength(25)
-                    .IsUnicode(false)
-                    .HasColumnName("ATC_name");
-
-                entity.Property(e => e.PbcId).HasColumnName("PBC_id");
-
-                entity.Property(e => e.AtcDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("ATC_date");
-
-                //entity.HasOne(d => d.Pbc)
-                //    .WithMany(p => p.AttachementAtcs)
-                //    .HasForeignKey(d => d.PbcId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("attachement_ATC_publication_PBC_FK");
-            });
-
-            modelBuilder.Entity<CategoryDto>(entity =>
-            {
-                entity.HasKey(e => e.CtgId)
-                    .HasName("category_CTG_PK");
-
-                entity.ToTable("category_CTG");
-
-                entity.Property(e => e.CtgId).HasColumnName("CTG_id");
-
-                entity.Property(e => e.CtgColor)
-                    .IsRequired()
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("CTG_color");
-
-                entity.Property(e => e.CtgTextColor)
-                    .IsRequired()
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("CTG_textColor");
-
-                entity.Property(e => e.CtgName)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false)
-                    .HasColumnName("CTG_name");
-            });
-
-            modelBuilder.Entity<LogsDto>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("logs_LOG");
-
-                entity.Property(e => e.LogDescription)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("LOG_description");
-
-                entity.Property(e => e.LogId)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("LOG_id");
-
-                entity.Property(e => e.LogTitle)
-                    .IsRequired()
-                    .HasMaxLength(25)
-                    .IsUnicode(false)
-                    .HasColumnName("LOG_title");
-            });
-
-            modelBuilder.Entity<PublicationDto>(entity =>
-            {
-                entity.HasKey(e => e.PbcId)
-                    .HasName("publication_PBC_PK");
-
-                entity.ToTable("publication_PBC");
-
-                entity.Property(e => e.PbcId).HasColumnName("PBC_id");
-
-                entity.Property(e => e.PbcDate)
-                    .HasColumnType("datetime")
-                    .HasColumnName("PBC_date");
-
-                entity.Property(e => e.PbcDescription)
-                    .IsRequired()
-                    .HasMaxLength(8000)
-                    .IsUnicode(false)
-                    .HasColumnName("PBC_description");
-
-                entity.Property(e => e.PbcResolved).HasColumnName("PBC_resolved");
-
-                entity.Property(e => e.PbcTitle)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false)
-                    .HasColumnName("PBC_title");
-
-                entity.Property(e => e.TagId).HasColumnName("TAG_id");
-
-                entity.Property(e => e.TypId).HasColumnName("TYP_id");
-
-                entity.Property(e => e.UsrId).HasColumnName("USR_id");
-
-                //entity.HasOne(d => d.Tag)
-                //    .WithMany(p => p.PublicationPbcs)
-                //    .HasForeignKey(d => d.TagId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("publication_PBC_tag_TAG_FK");
-
-                //entity.HasOne(d => d.Typ)
-                //    .WithMany(p => p.PublicationPbcs)
-                //    .HasForeignKey(d => d.TypId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("publication_PBC_type_TYP1_FK");
-
-                //entity.HasOne(d => d.Usr)
-                //    .WithMany(p => p.PublicationPbcs)
-                //    .HasForeignKey(d => d.UsrId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("publication_PBC_user_USR0_FK");
-            });
-
-            modelBuilder.Entity<CommentDto>(entity =>
-            {
-                entity.HasKey(e => e.CmtId)
-                    .HasName("comment_CMT_PK");
-                entity.ToTable("comment_CMT");
-                entity.Property(e => e.CmtId).HasColumnName("CMT_id");
-
-                entity.Property(e => e.PbcId).HasColumnName("PBC_id");
-            });
-
-            modelBuilder.Entity<TagDto>(entity =>
-            {
-                entity.HasKey(e => e.TagId)
-                    .HasName("tag_TAG_PK");
-
-                entity.ToTable("tag_TAG");
-
-                entity.Property(e => e.TagId).HasColumnName("TAG_id");
-
-                entity.Property(e => e.CtgId).HasColumnName("CTG_id");
-
-                entity.Property(e => e.TagName)
-                    .IsRequired()
-                    .HasMaxLength(25)
-                    .IsUnicode(false)
-                    .HasColumnName("TAG_name");
-
-                //entity.HasOne(d => d.Ctg)
-                //    .WithMany(p => p.TagTags)
-                //    .HasForeignKey(d => d.CtgId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("tag_TAG_category_CTG_FK");
-            });
-
-            modelBuilder.Entity<TypeDto>(entity =>
-            {
-                entity.HasKey(e => e.TypId)
-                    .HasName("type_TYP_PK");
-
-                entity.ToTable("type_TYP");
-
-                entity.Property(e => e.TypId).HasColumnName("TYP_id");
-
-                entity.Property(e => e.TypName)
-                    .IsRequired()
-                    .HasMaxLength(25)
-                    .IsUnicode(false)
-                    .HasColumnName("TYP_name");
-            });
-
-            modelBuilder.Entity<UserDto>(entity =>
-            {
-                entity.HasKey(e => e.UsrId)
-                    .HasName("user_USR_PK");
-
-                entity.ToTable("user_USR");
-
-                entity.Property(e => e.UsrId).HasColumnName("USR_id");
-
-                entity.Property(e => e.UsrExperience).HasColumnName("USR_experience");
-
-                entity.Property(e => e.UsrFirstname)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false)
-                    .HasColumnName("USR_firstname");
-
-                entity.Property(e => e.UsrLastname)
-                    .IsRequired()
-                    .HasMaxLength(30)
-                    .IsUnicode(false)
-                    .HasColumnName("USR_lastname");
-
-                entity.Property(e => e.UsrMail)
-                    .IsRequired()
-                    .HasMaxLength(40)
-                    .IsUnicode(false)
-                    .HasColumnName("USR_mail");
-            });
-
-            OnModelCreatingPartial(modelBuilder);
+            
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        public DbSet<CategoryDto> DbCategory { get; set; }
+        public DbSet<TagDto> DbTag { get; set; }
+        public DbSet<TypeDto> DbType { get; set; }
+        public DbSet<UserDto> DbUser { get; set; }
+        public DbSet<PublicationDto> DbPublication { get; set; }
+        public DbSet<AttachementDto> DbAttachement { get; set; }
+        public DbSet<CommentDto> DbComment { get; set; }
     }
 }
