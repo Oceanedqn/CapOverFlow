@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 
 <div class="col-12 col-xl-6">
-    <div class="card form-rounded mb-3" style="height: 40vh;">
+    <div class="card form-rounded mb-3" style="height: auto;">
         <div class="card-header form-rounded" style="background-color:@Question.Tag.Ctg.CtgColor; color:@Question.Tag.Ctg.CtgTextColor;">
             <div class="row justify-content-between align-items-center">
                 <h5 class="pt-2"><span class="badge badge-secondary">@Question.Tag.TagName</span> @Question.PbcTitle </h5>
@@ -15,18 +15,16 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" style="height: 20vh;">
             <div class="row">
                 <div class="col-12" style="max-height: 15vh; overflow-y: scroll;">
                     <p class="card-text">@Question.PbcDescription</p>
-                </div>
-                <div class="col-12 mt-3">
-                    @Question.Usr.UsrLastname @Question.Usr.UsrFirstname
                 </div>
             </div>
         </div>
         <div class="card-footer text-muted">
             <div class="row justify-content-end align-items-center">
+                <div class="mr-4">@Question.Usr.UsrLastname @Question.Usr.UsrFirstname</div>
                 <div class="mr-1">
                     @Question.PbcDate
                 </div>
@@ -39,9 +37,7 @@
                     {
                         <button class="btn btn-secondary" @onclick="(() => ShowQuestion(Question.PbcId))">Aider</button>
                     }
-
                 </div>
-
             </div>
         </div>
     </div>

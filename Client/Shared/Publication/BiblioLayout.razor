@@ -14,17 +14,17 @@
 }
 else
 {
-    <div class="col-sm-6">
-        <div class="card form-rounded mb-3" style="height: 40vh;">
+    <div class="col-12 col-xl-6">
+        <div class="card form-rounded mb-3" style="height: auto;">
             <div class="card-header form-rounded" style="background-color:@Biblio.Tag.Ctg.CtgColor; color:@Biblio.Tag.Ctg.CtgTextColor;">
                 <div class="row justify-content-between align-items-center">
                     <h5 class="pt-2"><span class="badge badge-secondary">@Biblio.Tag.TagName</span> @Biblio.PbcTitle </h5>
                     @Biblio.Usr.UsrLastname @Biblio.Usr.UsrFirstname
                 </div>
             </div>
-            <div class="card-body">
+            <div class="card-body" style="height: 20vh;">
                 <div class="row">
-                    <div class="col-12" style="max-height: 15vh; overflow-y: scroll;">
+                    <div class="col-12" style="height: 15vh; overflow-y: scroll;">
                         <p class="card-text">@Biblio.PbcDescription</p>
                     </div>
                 </div>
@@ -35,7 +35,7 @@ else
                         @Biblio.PbcDate
                     </div>
                     <div>
-                        <button class="btn btn-secondary">Commenter</button>
+                        <button class="btn btn-secondary" @onclick="(() => PutIdInLink(Biblio.PbcId))">Commenter</button>
                     </div>
                 </div>
             </div>
