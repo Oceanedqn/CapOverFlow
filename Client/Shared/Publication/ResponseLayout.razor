@@ -1,11 +1,16 @@
 ﻿
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
-            <h5>@Response.PbcTitle</h5>
-            <p class="text-muted">@Response.Usr.UsrLastname @Response.Usr.UsrFirstname</p>
-            <p>@Response.PbcDescription</p>
-        </div>
+        @foreach (var response in Responses)
+        {
+            <div class="col-12">
+                <h5>@response.PbcTitle</h5>
+                @*<p class="text-muted">@response.Usr.UsrLastname @response.Usr.UsrFirstname</p>*@
+                <p>@response.PbcDescription</p>
+            </div>
+        }
+
+
     </div>
 </div>
 
@@ -16,5 +21,5 @@
 
 @code {
     [Parameter]
-    public PublicationDto Response { get; set; } = new PublicationDto();
+    public List<PublicationDto> Responses { get; set; } = new List<PublicationDto>();
 }

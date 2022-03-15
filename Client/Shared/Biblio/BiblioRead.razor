@@ -1,6 +1,6 @@
 ﻿@page "/bibliocap/{id:int}"
 @inject IPublicationService PublicationService
-@inject ICommentService CommentService
+@inject IResponseService ResponseService
 
 @if (biblio == null)
 {
@@ -60,7 +60,7 @@ else
     public int Id { get; set; }
     PublicationDto biblio = null;
     PublicationDto response = new PublicationDto();
-    CommentDto comment = new CommentDto();
+    ResponseDto comment = new ResponseDto();
 
     protected override async Task OnInitializedAsync()
     {
