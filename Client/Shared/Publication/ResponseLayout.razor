@@ -1,13 +1,32 @@
-﻿
+﻿@inject IPublicationService PublicationService
+
 <div class="container-fluid">
     <div class="row">
         @foreach (var response in Responses)
         {
-            <div class="col-12">
-                <h5>@response.PbcTitle</h5>
-                @*<p class="text-muted">@response.Usr.UsrLastname @response.Usr.UsrFirstname</p>*@
-                <p>@response.PbcDescription</p>
+        <div class="col-12 card form-rounded mb-1" style="background-color: #FFFFFF20; border-left: 6px solid RGB( 18, 171, 219); color: @response.Tag.Ctg.CtgTextColor;">
+            <div class="card-header">
+                <div class="row  justify-content-between align-items-center">
+                    <div>
+                        @response.PbcTitle
+                    </div>
+                    <div>
+                        @response.PbcDate
+                    </div>
+                </div>
             </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p>@response.PbcDescription</p>
+                    </div>
+                    <div class="col-12">
+                        <p>@response.Usr.UsrLastname @response.Usr.UsrFirstname</p>
+                    </div>
+                </div>
+            </div>
+        </div>   
+
         }
 
 

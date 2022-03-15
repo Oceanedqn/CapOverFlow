@@ -40,7 +40,17 @@ namespace CapOverFlow.Server.Controllers
 
             List<ResponseDto> reponses = await _context.ResponsesDb.ToListAsync();
             List<PublicationDto> publications = await _context.PublicationsDb.ToListAsync();
-            
+
+            List<TagDto> tags = await _context.TagsDb.ToListAsync();
+            List<UserDto> users = await _context.UsersDb.ToListAsync();
+            List<TypeDto> types = await _context.TypesDb.ToListAsync();
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+
+            foreach (var tag in tags)
+            {
+                tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
+            }
+
             foreach (var response in reponses)
             {
                 if (response.PbcId == idPubli)
@@ -51,7 +61,12 @@ namespace CapOverFlow.Server.Controllers
            
             foreach(var rep in responsesSelect)
             {
-                publicationsSelect.Add(publications.Find(h => h.PbcId == rep.RspPubliId));
+                var publication = await _context.PublicationsDb.FirstOrDefaultAsync(h => h.PbcId == rep.RspPubliId);
+                publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
+                publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
+                publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
+
+                publicationsSelect.Add(publication);
             }
 
             return publicationsSelect;
