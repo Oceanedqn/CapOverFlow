@@ -1,4 +1,4 @@
-﻿@page "/questions/{id:int}"
+﻿@page "/{typePubli}/{id:int}"
 @inject IPublicationService PublicationService
 @inject IResponseService ResponseService
 @implements IDisposable
@@ -50,18 +50,20 @@ else
 }
 
 @code {
-        [Parameter]
-        public int Id { get; set; }
+    [Parameter]
+    public int Id { get; set; }
+    [Parameter]
+    public string typePubli { get; set; }
 
-        PublicationDto question = null; //display question
-        PublicationDto react = new PublicationDto(); //to complete new response
+    PublicationDto question = null; //display question
+    PublicationDto react = new PublicationDto(); //to complete new response
 
-        List<ResponseDto> comments = new List<ResponseDto>();
-        List<PublicationDto> responses = new List<PublicationDto>();
+    List<ResponseDto> comments = new List<ResponseDto>();
+    List<PublicationDto> responses = new List<PublicationDto>();
 
 
-        PublicationDto newResponse = new PublicationDto();
-        ResponseDto linkResponse = new ResponseDto();
+    PublicationDto newResponse = new PublicationDto();
+    ResponseDto linkResponse = new ResponseDto();
 
     protected override async Task OnInitializedAsync()
     {
@@ -101,9 +103,9 @@ else
             };
 
             responses.AddRange( await PublicationService.GetPublicationResponsesByListComment(
-                new List<ResponseDto>() 
-                { 
-                    await ResponseService.CreateEntity(linkResponse) 
+                new List<ResponseDto>()
+                {
+                    await ResponseService.CreateEntity(linkResponse)
                 }));
 
         }
