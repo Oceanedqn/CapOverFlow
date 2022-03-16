@@ -20,7 +20,7 @@ namespace CapOverFlow.Client
             builder.Services.AddScoped<IPublicationService, PublicationService>();
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-            builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IResponseService, ResponseService>();
 
             await builder.Build().RunAsync();
         }

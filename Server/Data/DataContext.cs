@@ -24,7 +24,7 @@ namespace CapOverFlow.Server.Data
         public virtual DbSet<TagDto> TagsDb { get; set; }
         public virtual DbSet<TypeDto> TypesDb { get; set; }
         public virtual DbSet<UserDto> UsersDb { get; set; }
-        public virtual DbSet<CommentDto> CommentsDb { get; set; }
+        public virtual DbSet<ResponseDto> ResponsesDb { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured) { 
@@ -64,12 +64,6 @@ namespace CapOverFlow.Server.Data
                 entity.Property(e => e.AtcDate)
                     .HasColumnType("datetime")
                     .HasColumnName("ATC_date");
-
-                //entity.HasOne(d => d.Pbc)
-                //    .WithMany(p => p.AttachementAtcs)
-                //    .HasForeignKey(d => d.PbcId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("attachement_ATC_publication_PBC_FK");
             });
 
             modelBuilder.Entity<CategoryDto>(entity =>
@@ -155,34 +149,18 @@ namespace CapOverFlow.Server.Data
                 entity.Property(e => e.TypId).HasColumnName("TYP_id");
 
                 entity.Property(e => e.UsrId).HasColumnName("USR_id");
-
-                //entity.HasOne(d => d.Tag)
-                //    .WithMany(p => p.PublicationPbcs)
-                //    .HasForeignKey(d => d.TagId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("publication_PBC_tag_TAG_FK");
-
-                //entity.HasOne(d => d.Typ)
-                //    .WithMany(p => p.PublicationPbcs)
-                //    .HasForeignKey(d => d.TypId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("publication_PBC_type_TYP1_FK");
-
-                //entity.HasOne(d => d.Usr)
-                //    .WithMany(p => p.PublicationPbcs)
-                //    .HasForeignKey(d => d.UsrId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("publication_PBC_user_USR0_FK");
             });
 
-            modelBuilder.Entity<CommentDto>(entity =>
+            modelBuilder.Entity<ResponseDto>(entity =>
             {
-                entity.HasKey(e => e.CmtId)
-                    .HasName("comment_CMT_PK");
-                entity.ToTable("comment_CMT");
-                entity.Property(e => e.CmtId).HasColumnName("CMT_id");
+                entity.HasKey(e => e.RspId)
+                    .HasName("response_RSP_PK");
+                entity.ToTable("response_RSP");
+                entity.Property(e => e.RspId).HasColumnName("RSP_id");
 
                 entity.Property(e => e.PbcId).HasColumnName("PBC_id");
+
+                entity.Property(e => e.RspPubliId).HasColumnName("RSP_publi_id");
             });
 
             modelBuilder.Entity<TagDto>(entity =>
@@ -202,12 +180,7 @@ namespace CapOverFlow.Server.Data
                     .IsUnicode(false)
                     .HasColumnName("TAG_name");
 
-                //entity.HasOne(d => d.Ctg)
-                //    .WithMany(p => p.TagTags)
-                //    .HasForeignKey(d => d.CtgId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("tag_TAG_category_CTG_FK");
-            });
+                });
 
             modelBuilder.Entity<TypeDto>(entity =>
             {

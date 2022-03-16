@@ -1,11 +1,35 @@
-﻿
+﻿@inject IPublicationService PublicationService
+
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
-            <h5>@Response.PbcTitle</h5>
-            <p class="text-muted">@Response.Usr.UsrLastname @Response.Usr.UsrFirstname</p>
-            <p>@Response.PbcDescription</p>
-        </div>
+        @foreach (var response in Responses)
+        {
+        <div class="col-12 card form-rounded mb-1" style="background-color: #FFFFFF15; border-left: 6px solid RGB( 18, 171, 219); color: @response.Tag.Ctg.CtgTextColor;">
+            <div class="card-header">
+                <div class="row  justify-content-between align-items-center">
+                    <div>
+                        @response.PbcTitle
+                    </div>
+                    <div>
+                        @response.PbcDate
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p>@response.PbcDescription</p>
+                    </div>
+                    <div class="col-12">
+                        <p>@response.Usr.UsrLastname @response.Usr.UsrFirstname</p>
+                    </div>
+                </div>
+            </div>
+        </div>   
+
+        }
+
+
     </div>
 </div>
 
@@ -16,5 +40,5 @@
 
 @code {
     [Parameter]
-    public PublicationDto Response { get; set; } = new PublicationDto();
+    public List<PublicationDto> Responses { get; set; } = new List<PublicationDto>();
 }

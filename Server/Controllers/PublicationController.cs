@@ -37,10 +37,7 @@ namespace CapOverFlow.Server.Controllers
                 publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
                 publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
                 publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
-
-
             }
-
             return publications;
         }
 
@@ -63,6 +60,46 @@ namespace CapOverFlow.Server.Controllers
             return publication;
         }
 
+        //private async Task<List<PublicationDto>> GetDbResponses()
+        //{
+        //    List<ResponseDto> responses = await _context.ResponsesDb.ToListAsync();
+        //    List<PublicationDto> publications = await _context.PublicationsDb.ToListAsync();
+        //    List<PublicationDto> publicationsSelect = new List<PublicationDto>();
+
+        //    foreach (var response in responses)
+        //    {
+        //        publicationsSelect.Add(publications.Find(h => h.PbcId == response.RspPubliId));
+        //    }
+        //    return publicationsSelect;
+        //}
+
+        private async Task<List<PublicationDto>> GetResponsesByComments(List<ResponseDto> responses)
+        {
+            List<PublicationDto> publicationsSelect = new List<PublicationDto>();
+
+            List<TagDto> tags = await _context.TagsDb.ToListAsync();
+            List<UserDto> users = await _context.UsersDb.ToListAsync();
+            List<TypeDto> types = await _context.TypesDb.ToListAsync();
+            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
+
+            foreach (var tag in tags)
+            {
+                tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
+            }          
+
+            foreach (var rep in responses)
+            {
+                var publication = await _context.PublicationsDb.FirstOrDefaultAsync(h => h.PbcId == rep.RspPubliId);
+                publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
+                publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
+                publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
+
+                publicationsSelect.Add(publication);
+            }
+
+            return publicationsSelect;
+        }
+
 
 
         [HttpGet]
@@ -77,6 +114,12 @@ namespace CapOverFlow.Server.Controllers
         {
             var question = await GetPublicationById(id);         
             return Ok(question);
+        }
+
+        [HttpPost("responses")]
+        public async Task<IActionResult> GetResponses(List<ResponseDto> responses)
+        {
+            return Ok(await GetResponsesByComments(responses));
         }
 
         [HttpPost]

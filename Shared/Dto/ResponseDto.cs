@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace CapOverFlow.Shared.Dto
 {
-    public partial class CommentDto
+    public partial class ResponseDto
     {
-        public int CmtId { get; set; }
+        public int RspId { get; set; }
+        public int RspPubliId { get; set; }
         public int PbcId { get; set; }
 
         public virtual PublicationDto Pbc { get; set; }

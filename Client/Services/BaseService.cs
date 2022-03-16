@@ -40,6 +40,7 @@ namespace CapOverFlow.Client.Services
         public async Task<T> CreateEntity(T entity)
         {
             var result = await _httpClient.PostAsJsonAsync($"api/{_endPoint}", entity);
+            var tips = await result.Content.ReadAsStringAsync();
             var temp = await result.Content.ReadFromJsonAsync<T>();
             Entities.Add(temp);
             OnChange.Invoke();
