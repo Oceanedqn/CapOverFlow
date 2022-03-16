@@ -20,56 +20,35 @@ namespace CapOverFlow.Server.Controllers
             _context = context;
         }
 
-        private async Task<List<PublicationDto>> GetDbResponses()
+        private async Task<List<ResponseDto>> GetDbResponses()
+        {
+            List<ResponseDto> responses = await _context.ResponsesDb.ToListAsync();
+            return responses;
+        }
+
+        private async Task<ResponseDto> GetDbResponseById(int id)
         {
             List<ResponseDto> responses = await _context.ResponsesDb.ToListAsync();
             List<PublicationDto> publications = await _context.PublicationsDb.ToListAsync();
-            List<PublicationDto> publicationsSelect = new List<PublicationDto>();
 
-            foreach(var response in responses)
-            {
-                publicationsSelect.Add(publications.Find(h => h.PbcId == response.RspPubliId));
-            }
-            return publicationsSelect;
+            var reponse = responses.FirstOrDefault(h => h.RspId == id);
+            reponse.Pbc = publications.FirstOrDefault(h => h.PbcId == reponse.RspPubliId);
+            return reponse;
         }
 
-        private async Task<List<PublicationDto>> GetResponseById(int idPubli)
-        {            
-            List<ResponseDto> responsesSelect = new List<ResponseDto>();
-            List<PublicationDto> publicationsSelect = new List<PublicationDto>();
+        private async Task<List<ResponseDto>> GetDbResponsesById(int idPubli)
+        {
+            List<ResponseDto> responses = await _context.ResponsesDb.ToListAsync();
+            List<ResponseDto> responsesList = new List<ResponseDto>();
 
-            List<ResponseDto> reponses = await _context.ResponsesDb.ToListAsync();
-            List<PublicationDto> publications = await _context.PublicationsDb.ToListAsync();
-
-            List<TagDto> tags = await _context.TagsDb.ToListAsync();
-            List<UserDto> users = await _context.UsersDb.ToListAsync();
-            List<TypeDto> types = await _context.TypesDb.ToListAsync();
-            List<CategoryDto> categories = await _context.CategoriesDb.ToListAsync();
-
-            foreach (var tag in tags)
+            foreach(var resp in responses)
             {
-                tag.Ctg = categories.FirstOrDefault(ca => ca.CtgId == tag.CtgId);
-            }
-
-            foreach (var response in reponses)
-            {
-                if (response.PbcId == idPubli)
+                if(resp.PbcId == idPubli)
                 {
-                    responsesSelect.Add(response);
+                    responsesList.Add(resp);
                 }
             }
-           
-            foreach(var rep in responsesSelect)
-            {
-                var publication = await _context.PublicationsDb.FirstOrDefaultAsync(h => h.PbcId == rep.RspPubliId);
-                publication.Tag = tags.FirstOrDefault(ta => ta.TagId == publication.TagId);
-                publication.Usr = users.FirstOrDefault(us => us.UsrId == publication.UsrId);
-                publication.Typ = types.FirstOrDefault(ty => ty.TypId == publication.TypId);
-
-                publicationsSelect.Add(publication);
-            }
-
-            return publicationsSelect;
+            return responsesList;
         }
 
         [HttpGet]
@@ -79,19 +58,19 @@ namespace CapOverFlow.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetResponse(int id)
+        public async Task<IActionResult> GetPubliResponses(int id)
         {
-            var responses = await GetResponseById(id);
+            var responses = await GetDbResponsesById(id);
             return Ok(responses);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateResponse(ResponseDto response)
-        {
+        {          
             _context.ResponsesDb.Add(response);
             await _context.SaveChangesAsync();
 
-            return Ok(await GetResponseById(response.RspId));
+            return Ok(await GetDbResponseById(response.RspId));
         }
 
         [HttpDelete("{id}")]

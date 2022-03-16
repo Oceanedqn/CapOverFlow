@@ -1,6 +1,7 @@
 ﻿@page "/questions/{id:int}"
 @inject IPublicationService PublicationService
 @inject IResponseService ResponseService
+@implements IDisposable
 
 @if (question == null)
 {
@@ -24,19 +25,23 @@ else
                 <div class="col-12 container-fluid form-rounded py-3" style="background-color:@question.Tag.Ctg.CtgColor; height:90vh;">
                     <div>
                         <h5 class="text-center" style="color:@question.Tag.Ctg.CtgTextColor;">Commentaires</h5>
-                        <EditForm Model="@response" OnValidSubmit="@HandleValidSubmit">
+                        <EditForm Model="@react" OnSubmit="@HandleSubmitComment">
                             <DataAnnotationsValidator />
                             <div class="form-group">
-                                <InputText @bind-Value="@response.PbcTitle" class="form-control form-rounded" placeholder="Title"></InputText>
+                                <InputText @bind-Value="@react.PbcTitle" class="form-control form-rounded" placeholder="Title"></InputText>
+                                <ValidationMessage For="@(() => react.PbcTitle)" />
                             </div>
                             <div class="form-group">
-                                <InputTextArea @bind-Value="@response.PbcDescription" class="form-control form-rounded" placeholder="Description" rows="4"></InputTextArea>
-                                <button class="btn btn-secondary form-rounded" type="submit">Répondre</button>
+                                <InputTextArea @bind-Value="@react.PbcDescription" class="form-control form-rounded" placeholder="Description" rows="4"></InputTextArea>
+                                <ValidationMessage For="@(() => react.PbcDescription)" />                               
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-secondary form-rounded">Répondre</button>
                             </div>
                         </EditForm>
                     </div>
-                    <div>                      
-                        <ResponseLayout Responses="responses"/>                     
+                    <div class="form-rounded" style="height: 58vh; overflow-y: scroll;">
+                        <ResponseLayout Responses="responses" />
                     </div>
                 </div>
             </div>
@@ -45,20 +50,71 @@ else
 }
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
+        [Parameter]
+        public int Id { get; set; }
 
-    PublicationDto question = null;
-    PublicationDto response = new PublicationDto();
-    List<PublicationDto> responses = new List<PublicationDto>();
+        PublicationDto question = null; //display question
+        PublicationDto react = new PublicationDto(); //to complete new response
+
+        List<ResponseDto> comments = new List<ResponseDto>();
+        List<PublicationDto> responses = new List<PublicationDto>();
+
+
+        PublicationDto newResponse = new PublicationDto();
+        ResponseDto linkResponse = new ResponseDto();
 
     protected override async Task OnInitializedAsync()
     {
+        ResponseService.OnChange += StateHasChanged;
+        PublicationService.OnChange += StateHasChanged;
+
         question = await PublicationService.GetEntity(Id);
-        responses = await ResponseService.GetResponseById(Id);
+        comments = await ResponseService.GetCommentsById(question.PbcId);
+        responses = await PublicationService.GetPublicationResponsesByListComment(comments);
+
     }
 
-    private void HandleValidSubmit()
+    private async Task HandleSubmitComment()
     {
+
+        if (react.PbcDescription != "" && react.PbcTitle != "")
+        {
+            react = new PublicationDto
+            {
+                PbcTitle = react.PbcTitle,
+                PbcDescription = react.PbcDescription,
+                PbcDate = DateTime.Now,
+                PbcResolved = false,
+                TagId = question.TagId,
+                UsrId = 1,
+                TypId = 2,
+            };
+
+            newResponse = await PublicationService.CreateEntity(react);
+
+            react = new PublicationDto();
+
+            linkResponse = new ResponseDto
+            {
+                PbcId = question.PbcId,
+                RspPubliId = newResponse.PbcId
+            };
+
+            responses.AddRange( await PublicationService.GetPublicationResponsesByListComment(
+                new List<ResponseDto>() 
+                { 
+                    await ResponseService.CreateEntity(linkResponse) 
+                }));
+
+        }
+
     }
+
+    public void Dispose()
+    {
+        PublicationService.OnChange -= StateHasChanged;
+        ResponseService.OnChange -= StateHasChanged;
+
+    }
+
 }

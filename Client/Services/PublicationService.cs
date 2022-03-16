@@ -11,8 +11,16 @@ namespace CapOverFlow.Client.Services
 {
     public class PublicationService : BaseService<PublicationDto>, IPublicationService
     {
+        private readonly HttpClient _httpClient;
         public PublicationService(HttpClient httpClient) : base(httpClient, "publication")
         {
+            _httpClient = httpClient;
+        }
+
+        public async Task<List<PublicationDto>> GetPublicationResponsesByListComment(List<ResponseDto> responses)
+        {
+            var rep = await _httpClient.PostAsJsonAsync($"api/publication/responses", responses);
+            return await rep.Content.ReadFromJsonAsync<List<PublicationDto>>();
         }
     }
 }

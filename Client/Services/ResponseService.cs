@@ -17,11 +17,9 @@ namespace CapOverFlow.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task<List<PublicationDto>> GetResponseById(int idPubli)
+        public async Task<List<ResponseDto>> GetCommentsById(int idPubli)
         {
-            return await _httpClient.GetFromJsonAsync<List<PublicationDto>>($"api/response/{idPubli}");
+            return await _httpClient.GetFromJsonAsync<List<ResponseDto>>($"api/response/{idPubli}");
         }
-
-        
     }
 }

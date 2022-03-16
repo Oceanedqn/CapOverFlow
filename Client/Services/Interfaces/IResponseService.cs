@@ -8,6 +8,6 @@ namespace CapOverFlow.Client.Services.Interfaces
 {
     interface IResponseService : IBaseService<ResponseDto>
     {
-        Task<List<PublicationDto>> GetResponseById(int idPubli);
+        Task<List<ResponseDto>> GetCommentsById(int idPubli);
     }
 }
